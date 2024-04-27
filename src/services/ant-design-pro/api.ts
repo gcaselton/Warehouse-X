@@ -68,8 +68,22 @@ export async function updateUserRole(options?: { [userId: any]: any }) {
 }
 /** 退出登录接口 POST /api/login/outLogin */
 export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
-    method: 'POST',
+  return request<Record<string, any>>('/admin/system/index/logout', {
+    method: 'GET',
+    headers: {
+      token:TOKEN
+    },
+    ...(options || {}),
+  });
+}
+
+// get product list
+export async function getProductList(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/admin/product/product', {
+    method: 'GET',
+    headers: {
+      token:TOKEN
+    },
     ...(options || {}),
   });
 }
