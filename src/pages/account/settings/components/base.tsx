@@ -36,7 +36,7 @@ const BaseView: React.FC = () => {
         <div className={styles.button_view}>
           <Button>
             <UploadOutlined />
-            更换头像
+            更换头像qqq
           </Button>
         </div>
       </Upload>

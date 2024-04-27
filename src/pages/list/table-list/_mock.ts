@@ -18,7 +18,7 @@ const genList = (current: number, pageSize: number) => {
       ][i % 2],
       name: `TradeCode ${index}`,
       owner: '曲丽丽',
-      desc: '这是一段描述',
+      desc: '这是一段描述111',
       callNo: Math.floor(Math.random() * 1000),
       status: (Math.floor(Math.random() * 10) % 4).toString(),
       updatedAt: new Date(),

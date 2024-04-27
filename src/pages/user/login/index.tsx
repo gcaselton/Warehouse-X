@@ -1,3 +1,4 @@
+import { history, Link, useRequest } from '@umijs/max';
 import { Footer } from '@/components';
 import {  } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
@@ -21,6 +22,7 @@ import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
+import { fakeLogin } from './service';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -104,6 +106,7 @@ const Login: React.FC = () => {
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
+    console.log({userInfo})
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
@@ -115,22 +118,33 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
-    console.log(111)
+    console.log(values)
+   const params = {
+    loginDto:{...values}
+   }
+   
     try {
       // login
-      const msg = await login({ ...values, type });
-      if (msg.status === 'ok') {
+      // const msg = await login({ ...values, type });
+      const msg = await fakeLogin({...values});
+      console.log({msg});
+      // debugger
+      // const msg = await login({ ...values });
+      const { code,data } = msg;
+      if (code === 200) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
+        // token
+        localStorage.setItem('TOKEN_STRING',data?.token || '');
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         window.location.href = urlParams.get('redirect') || '/';
         return;
       }
-      console.log(msg);
+      console.log({msg});
       // 如果失败去设置用户错误信息
       setUserLoginState(msg);
     } catch (error) {
@@ -168,10 +182,10 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
+          title="Warehouse X"
           subTitle={intl.formatMessage({ id: ' ' })}
           initialValues={{
-            autoLogin: true,
+            // autoLogin: true,
           }}
         
           onFinish={async (values) => {
@@ -206,7 +220,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
+                        defaultMessage="username"
                       />
                     ),
                   },
@@ -220,7 +234,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  defaultMessage: 'password',
                 })}
                 rules={[
                   {

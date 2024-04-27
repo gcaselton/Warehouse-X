@@ -1,17 +1,71 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from '@umijs/max';
-
+const TOKEN = localStorage.getItem('TOKEN_STRING');
+const REQUEST_HEADER = {
+  'Authorization':TOKEN,
+}
 /** 获取当前的用户 GET /api/currentUser */
+// export async function currentUser(options?: { [key: string]: any }) {
+//   return request<{
+//     data: API.CurrentUser;
+//   }>('/api/currentUser', {
+//     method: 'GET',
+//     ...(options || {}),
+//   });
+// }
+// get user information
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
     data: API.CurrentUser;
-  }>('/api/currentUser', {
+  }>('/admin/system/index/getUserInfo', {
     method: 'GET',
+    headers: {
+      token:TOKEN
+      // 'Authorization':TOKEN,
+      // 'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    // ...(options || {}),
+  });
+}
+
+// updateSysUser
+export async function updateUserInfo(options?: { [key: string]: any }) {
+  return request<{
+    data: API.userInfo;
+  }>('/admin/system/sysUser/updateSysUser', {
+    method: 'PUT',
     ...(options || {}),
   });
 }
 
+// saveSysUser
+export async function saveUserInfo(options?: { [key: string]: any }) {
+  return request<{
+    data: API.userInfo;
+  }>('/admin/system/sysUser/saveSysUser', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+// delete user By Id
+export async function deleteUserByID(options?: { [userId: any]: any }) {
+  return request<{
+    data: API.userInfo;
+  }>('/admin/system/sysUser/deleteById', {
+    method: 'DELETE',
+    ...(options || {}),
+  });
+}
+// update user Role
+export async function updateUserRole(options?: { [userId: any]: any }) {
+  return request<{
+    data: API.userInfo;
+  }>('/admin/system/sysRole/updateSysRole', {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}
 /** 退出登录接口 POST /api/login/outLogin */
 export async function outLogin(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/login/outLogin', {
@@ -25,7 +79,7 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
   return request<API.LoginResult>('/api/login/account', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     data: body,
     ...(options || {}),
@@ -90,5 +144,25 @@ export async function removeRule(options?: { [key: string]: any }) {
       method: 'delete',
       ...(options || {}),
     },
+  });
+}
+
+/** 获取入库列表 GET /admin/product/product */
+export async function getInStorageList(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.RuleList>('/api/rule', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
   });
 }

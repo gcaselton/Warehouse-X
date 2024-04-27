@@ -51,7 +51,7 @@ export default {
   'pages.searchTable.titleDesc': 'deskripsi',
   'pages.searchTable.ruleName': 'Nama aturan wajib diisi',
   'pages.searchTable.titleCallNo': 'Jumlah panggilan',
-  'pages.searchTable.titleStatus': 'Status',
+  'pages.searchTable.titleStatus': 'Status111',
   'pages.searchTable.nameStatus.default': 'default',
   'pages.searchTable.nameStatus.running': 'menyala',
   'pages.searchTable.nameStatus.online': 'online',

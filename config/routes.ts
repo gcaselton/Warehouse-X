@@ -235,6 +235,40 @@ export default [
   //   ],
   // },
   {
+    name:"order",
+    path:"/order",
+    icon: 'table',
+    routes:[
+      {
+        path: '/order',
+        redirect: '/order/in-storage',
+      },
+      {
+        name: 'in-storage',
+        // icon: 'smile',
+        path: '/order/in-storage',
+        component: './order/in-storage',
+      },
+    ]
+  },
+  {
+    name:"staff",
+    path:"/staff",
+    icon: 'smile',
+    routes:[
+      {
+        path: '/staff',
+        redirect: '/staff/list',
+      },
+      {
+        name: 'list',
+        // icon: 'smile',
+        path: '/staff/list',
+        component: './staff/list',
+      },
+    ]
+  },
+  {
     name: 'account',
     icon: 'user',
     path: '/account',
