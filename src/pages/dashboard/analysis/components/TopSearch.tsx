@@ -168,7 +168,7 @@ const TopSearch = ({
           style: {
             marginBottom: 0,
           },
-          pageSize: 5,
+          limit: 5,
         }}
       />
     </Card>

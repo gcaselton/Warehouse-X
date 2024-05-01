@@ -44,7 +44,7 @@ declare namespace API {
 
   type PageParams = {
     current?: number;
-    pageSize?: number;
+    limit?: number;
   };
 
   type RuleListItem = {

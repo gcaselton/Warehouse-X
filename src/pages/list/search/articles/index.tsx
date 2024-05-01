@@ -14,7 +14,7 @@ import useStyles from './style.style';
 
 const FormItem = Form.Item;
 
-const pageSize = 5;
+const limit = 5;
 
 const Articles: FC = () => {
   const [form] = Form.useForm();
@@ -24,7 +24,7 @@ const Articles: FC = () => {
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
       return queryFakeList({
-        count: pageSize,
+        count: limit,
       });
     },
     {

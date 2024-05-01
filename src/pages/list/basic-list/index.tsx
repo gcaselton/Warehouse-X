@@ -102,7 +102,7 @@ export const BasicList: FC = () => {
   const paginationProps = {
     showSizeChanger: true,
     showQuickJumper: true,
-    pageSize: 5,
+    limit: 5,
     total: list.length,
   };
   const showEditModal = (item: BasicListItemDataType) => {

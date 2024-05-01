@@ -10,7 +10,7 @@ export async function rule(
     /** 当前的页码 */
     current?: number;
     /** 页面的容量 */
-    pageSize?: number;
+    limit?: number;
   },
   options?: { [key: string]: any },
 ) {

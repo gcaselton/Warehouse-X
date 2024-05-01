@@ -3,10 +3,10 @@ import { parse } from 'url';
 import type { TableListItem, TableListParams } from './data.d';
 
 // mock tableListDataSource
-const genList = (current: number, pageSize: number) => {
+const genList = (current: number, limit: number) => {
   const tableListDataSource: TableListItem[] = [];
 
-  for (let i = 0; i < pageSize; i += 1) {
+  for (let i = 0; i < limit; i += 1) {
     const index = (current - 1) * 10 + i;
     tableListDataSource.push({
       key: index,
@@ -37,12 +37,12 @@ function getRule(req: Request, res: Response, u: string) {
   if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
     realUrl = req.url;
   }
-  const { current = 1, pageSize = 10 } = req.query;
+  const { current = 1, limit = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as TableListParams;
 
   let dataSource = [...tableListDataSource].slice(
-    ((current as number) - 1) * (pageSize as number),
-    (current as number) * (pageSize as number),
+    ((current as number) - 1) * (limit as number),
+    (current as number) * (limit as number),
   );
   if (params.sorter) {
     const sorter = JSON.parse(params.sorter as any);
@@ -87,16 +87,16 @@ function getRule(req: Request, res: Response, u: string) {
     dataSource = dataSource.filter((data) => data.name.includes(params.name || ''));
   }
 
-  let finalPageSize = 10;
-  if (params.pageSize) {
-    finalPageSize = parseInt(`${params.pageSize}`, 10);
+  let finallimit = 10;
+  if (params.limit) {
+    finallimit = parseInt(`${params.limit}`, 10);
   }
 
   const result = {
     data: dataSource,
     total: tableListDataSource.length,
     success: true,
-    pageSize: finalPageSize,
+    limit: finallimit,
     current: parseInt(`${params.currentPage}`, 10) || 1,
   };
 

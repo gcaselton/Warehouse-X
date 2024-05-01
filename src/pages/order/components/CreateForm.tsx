@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Image, Upload } from 'antd';
+import { Image, Upload,Cascader } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import { message, Modal,Button } from 'antd';
-import { addRule } from '@/services/ant-design-pro/api';
+import { addProduct } from '@/services/ant-design-pro/api';
 import { ActionType, ModalForm, ProFormText, ProFormTextArea,  ProFormRadio,ProForm } from '@ant-design/pro-components';
 
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
@@ -26,6 +26,10 @@ const CreateForm: FC<CreateFormProps> = (props) => {
    
   
   ]);
+  const headers = {
+    token:localStorage.getItem('TOKEN_STRING')
+  }
+ 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as FileType);
@@ -36,7 +40,9 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+   
+  setFileList(newFileList);
+    console.log({fileList});
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -46,6 +52,149 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   );
   const { reload } = props;
 
+  interface Option {
+    value: string | number;
+    label: string;
+    children?: Option[];
+  }
+  
+  // storeLocation
+  const options: Option[] = [
+    {
+      value: 'Warehouse return',
+      label: 'Warehouse return',
+      children: [
+        {
+          value: 'section A',
+          label: 'section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'section B',
+          label: 'section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'Warehouse repair',
+      label: 'Warehouse repair',
+      children: [
+        {
+          value: 'section A',
+          label: 'section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'section B',
+          label: 'section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'Warehouse recycle',
+      label: 'Warehouse recycle',
+      children: [
+        {
+          value: 'section A',
+          label: 'section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'section B',
+          label: 'section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+      ],
+    },
+  ];
+  
+  const onChange = (value: (string | number)[]) => {
+    console.log(value);
+  };
+  
+  
+  
+
   const [messageApi, contextHolder] = message.useMessage();
   const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 14 } };
   /**
@@ -54,7 +203,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
    * */
   const intl = useIntl();
 
-  const { run, loading } = useRequest(addRule, {
+  const { run, loading } = useRequest(addProduct, {
     manual: true,
     onSuccess: () => {
       messageApi.success('Added successfully');
@@ -83,7 +232,17 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         width="800px"
         modalProps={{ okButtonProps: { loading } }}
         onFinish={async (value) => {
-          await run({ data: value as API.RuleListItem });
+          console.log("form value",value,value.storeLocation)
+          // image url
+          // value?.sliderUrls = fileList
+          let formData = {
+            name:value?.name,
+            sliderUrls:value?.image?.file?.response?.data || "",
+            categoryId:Number(value?.categoryId),
+            orderId:Number(value?.orderId),
+            storeLOcation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`
+          }
+          await run(formDataproduct/product);
 
           return true;
         }}
@@ -120,7 +279,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             },
           ]}
           width="md"
-          name="serialId"
+          name="orderId"
           label={intl.formatMessage({
             id: 'pages.newOrder.serialId',
             defaultMessage: 'serialId',
@@ -153,7 +312,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               },
             ]}
             label="returnType"
-            name="publicType"
+            name="categoryId"
           />
             <ProForm.Item 
             
@@ -169,19 +328,29 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               },
             ]}
             width="md"
-            name="name"
+            name="image"
             label={intl.formatMessage({
               id: 'pages.newOrder.image',
               defaultMessage: 'image',
             })}>
+              
+              {/* <Upload {...uploadProps}>
+              <button style={{ border: 0, background: 'none' }} type="button">
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </button>
+              </Upload> */}
+                  
               <Upload
-                  action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                  action="http://117.72.14.250:8501/admin/system/fileUpload"
+                  headers={headers}
+                  multiple={false}
                   listType="picture-circle"
                   fileList={fileList}
                   onPreview={handlePreview}
                   onChange={handleChange}
                 >
-                {fileList.length >= 8 ? null : uploadButton}
+                {fileList.length >= 1 ? null : uploadButton}
               </Upload>
             </ProForm.Item>
           
@@ -196,6 +365,27 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           src={previewImage}
         />
       )}
+      <ProForm.Item 
+        rules={[
+          {
+               required: true,
+               message: (
+                 <FormattedMessage
+                   id="storeLocation"
+                   defaultMessage="storeLocation is required"
+                 />
+               ),
+          },
+        ]}
+           width="md"
+           name="storeLocation"
+           label={intl.formatMessage({
+             id: 'storeLocation',
+             defaultMessage: 'storeLocation',
+           })}>
+            <Cascader options={options} onChange={onChange} placeholder="Please select" />
+        </ProForm.Item>
+     
         <ProFormTextArea 
           width="md" 
           name="desc"

@@ -77,6 +77,19 @@ export async function outLogin(options?: { [key: string]: any }) {
   });
 }
 
+// add product
+export async function addProduct(body, options?: { [key: string]: any }) {
+  return request<API.LoginResult>('/admin/product/product/save', {
+    method: 'POST',
+    headers: {
+      token:TOKEN,
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+
 // get product list
 export async function getProductList(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/admin/product/product', {
@@ -115,7 +128,7 @@ export async function rule(
     /** 当前的页码 */
     current?: number;
     /** 页面的容量 */
-    pageSize?: number;
+    limit?: number;
   },
   options?: { [key: string]: any },
 ) {
@@ -169,13 +182,22 @@ export async function getInStorageList(
     current?: number;
     /** 页面的容量 */
     pageSize?: number;
+    name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/rule', {
+  console.log("getInStorageList--params",params)
+  return request(`/admin/product/product/${params.current}/${params.pageSize}`, {
+  
     method: 'GET',
     params: {
-      ...params,
+      productDto:{
+        name:params?.name || '',
+        categoryld:params?.categoryld || ''
+      }
+    },
+    headers: {
+      token:TOKEN
     },
     ...(options || {}),
   });

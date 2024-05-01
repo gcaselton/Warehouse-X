@@ -15,7 +15,7 @@ export type TableListItem = {
 
 export type TableListPagination = {
   total: number;
-  pageSize: number;
+  limit: number;
   current: number;
 };
 
@@ -29,7 +29,7 @@ export type TableListParams = {
   name?: string;
   desc?: string;
   key?: number;
-  pageSize?: number;
+  limit?: number;
   currentPage?: number;
   filter?: Record<string, any[]>;
   sorter?: Record<string, any>;

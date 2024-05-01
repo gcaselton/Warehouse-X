@@ -20,6 +20,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 const CreateForm: FC<CreateFormProps> = (props) => {
+  console.log({props});
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([
@@ -69,6 +70,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
     <>
       {contextHolder}
       <ModalForm
+        initialValues={props.values}
         title={intl.formatMessage({
           id: 'pages.searchTable.createForm.updateRule',
           defaultMessage: 'New rule',
@@ -113,17 +115,17 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.newOrder.serialId.required"
-                  defaultMessage="serialId is required"
+                  id="pages.newOrder.orderId.required"
+                  defaultMessage="orderId is required"
                 />
               ),
             },
           ]}
           width="md"
-          name="serialId"
+          name="orderId"
           label={intl.formatMessage({
-            id: 'pages.newOrder.serialId',
-            defaultMessage: 'serialId',
+            id: 'pages.newOrder.orderId',
+            defaultMessage: 'orderId',
           })}
         />
         <ProFormRadio.Group
@@ -140,20 +142,20 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             ]}
             options={[
               {
-                value: '1',
+                value: 1,
                 label: 'refund',
               },
               {
-                value: '2',
+                value: 2,
                 label: 'repair',
               },
               {
-                value: '3',
+                value: 3,
                 label: 'recycle',
               },
             ]}
             label="returnType"
-            name="publicType"
+            name="categoryId"
           />
             <ProForm.Item 
             

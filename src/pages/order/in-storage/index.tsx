@@ -63,11 +63,11 @@ const TableList: React.FC = () => {
         );
       },
     },
-    {
-      title: <FormattedMessage id="pages.searchTable.serialId" defaultMessage="Description" />,
-      dataIndex: 'desc',
-      valueType: 'textarea',
-    },
+    // {
+    //   title: <FormattedMessage id="pages.searchTable.orderId" defaultMessage="Description" />,
+    //   dataIndex: 'orderId',
+    //   valueType: 'textarea',
+    // },
     {
       title: (
         <FormattedMessage
@@ -148,7 +148,7 @@ const TableList: React.FC = () => {
         />
       ),
       sorter: true,
-      dataIndex: 'updatedAt',
+      dataIndex: 'createTime',
       valueType: 'dateTime',
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
         const status = form.getFieldValue('status');
@@ -243,7 +243,24 @@ const TableList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [<CreateForm key="create" reload={actionRef.current?.reload} />]}
-        request={getInStorageList}
+        //request={getInStorageList}
+        request = {async (
+          params: T & {
+            pageSize: number;
+            current: number;
+          },
+          sort,
+          filter,
+        ) => {
+          console.log('params-------------',params)
+          const msg = await getInStorageList(params);
+          console.log('getInStorageList',msg);
+          return {
+            data: msg?.data?.list,
+            success: msg?.code === 200,
+            total: msg?.data?.total,
+          };
+        }}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
