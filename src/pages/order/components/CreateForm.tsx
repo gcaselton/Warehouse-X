@@ -220,11 +220,11 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       <ModalForm
         title={intl.formatMessage({
           id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
+          defaultMessage: 'in storage',
         })}
         trigger={
           <Button type="primary" icon={<PlusOutlined />}>
-            <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+            <FormattedMessage id="inStorage" defaultMessage="inStorage" />
           </Button>
         }
         layout="horizontal"
@@ -240,9 +240,10 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             sliderUrls:value?.image?.file?.response?.data || "",
             categoryId:Number(value?.categoryId),
             orderId:Number(value?.orderId),
-            storeLOcation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`
+            storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
+            status:1
           }
-          await run(formDataproduct/product);
+          await run(formData);
 
           return true;
         }}

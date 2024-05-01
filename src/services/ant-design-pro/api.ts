@@ -89,6 +89,18 @@ export async function addProduct(body, options?: { [key: string]: any }) {
   });
 }
 
+// update product
+export async function updateProduct(body, options?: { [key: string]: any }) {
+  return request<API.LoginResult>('/admin/product/product/updateById', {
+    method: 'POST',
+    headers: {
+      token:TOKEN,
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 
 // get product list
 export async function getProductList(options?: { [key: string]: any }) {
@@ -174,6 +186,29 @@ export async function removeRule(options?: { [key: string]: any }) {
   });
 }
 
+/** delete order GET /admin/product/product/deleteById */
+export async function deleteOrerById(
+  params: {
+    // query
+    id?: number;
+  
+  },
+  options?: { [key: string]: any },
+){
+  console.log("deleteOrerById--params",params)
+  return request(`/admin/product/product/deleteById/${params}  `, {
+  
+    method: 'DELETE',
+    params: {
+      
+    },
+    headers: {
+      token:TOKEN
+    },
+    ...(options || {}),
+  });
+}
+
 /** 获取入库列表 GET /admin/product/product */
 export async function getInStorageList(
   params: {
@@ -187,17 +222,47 @@ export async function getInStorageList(
   options?: { [key: string]: any },
 ) {
   console.log("getInStorageList--params",params)
+  let formData = new FormData();
+  formData.append("name", params.name);
   return request(`/admin/product/product/${params.current}/${params.pageSize}`, {
   
     method: 'GET',
+    // body:formData,
+    // params:{
+    //   productDto:formData
+    // },
     params: {
-      productDto:{
-        name:params?.name || '',
-        categoryld:params?.categoryld || ''
-      }
+      name:params?.name,
+      categoryld:params?.categoryld || '',
+      orderId:params?.orderId
+      // productDto:{
+      //   name:params?.name,
+      //   categoryld:params?.categoryld || ''
+      // }
     },
     headers: {
-      token:TOKEN
+      token:TOKEN,
+      // 'Content-Type': 'multipart/form-data'
+      // 'Content-Type': 'form-data'
+      // 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'
+    },
+    ...(options || {}),
+  });
+}
+
+/** out storage */
+export async function outStorageById(
+  params: {
+    id?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  console.log("outStorageById--params",params)
+  return request(`/admin/product/product/updateStatus/${params}/${-1}`, {
+    method: 'GET',
+    // params,
+    headers: {
+      token:TOKEN,
     },
     ...(options || {}),
   });

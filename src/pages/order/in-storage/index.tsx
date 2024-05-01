@@ -1,16 +1,39 @@
-import { removeRule, rule,getInStorageList } from '@/services/ant-design-pro/api';
+import { PlusOutlined } from '@ant-design/icons';
+import { removeRule, rule,getInStorageList,deleteOrerById } from '@/services/ant-design-pro/api';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
+  ModalForm,
+  ProForm,
+  ProFormDateRangePicker,
+  ProFormSelect,
+  ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
+import { 
+  Button, 
+  Drawer, 
+  Input, 
+  message,
+  Modal,
+  Avatar,
+  Badge,
+  Form,
+  Card,
+  Col,
+  Dropdown,
+  List,
+  Progress,
+  Radio,
+  Row,
+ } from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
+import DistributeForm from '../components/DistributeForm'
 
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -39,7 +62,7 @@ const TableList: React.FC = () => {
       messageApi.error('Delete failed, please try again');
     },
   });
-
+  const [form] = Form.useForm<{ name: string; company: string }>();
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: (
@@ -51,15 +74,17 @@ const TableList: React.FC = () => {
       dataIndex: 'name',
       tip: 'The rule name is the unique key',
       render: (dom, entity) => {
+        // debugger
+        // 
         return (
-          <a
+          <a 
             onClick={() => {
               setCurrentRow(entity);
               setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
+            }}>
+          <Avatar size="large" shape="square" style={{marginRight:10}} src={entity.sliderUrls} />
+          {dom}
+        </a>
         );
       },
     },
@@ -75,7 +100,7 @@ const TableList: React.FC = () => {
           defaultMessage="Number of service calls"
         />
       ),
-      dataIndex: 'callNo',
+      dataIndex: 'orderId',
       sorter: true,
       hideInForm: true,
       renderText: (val: string) =>
@@ -85,12 +110,41 @@ const TableList: React.FC = () => {
         })}`,
     },
     {
+      title: <FormattedMessage id="returnType" defaultMessage="returnType" />,
+      dataIndex: 'categoryId',
+      hideInForm: true,
+      valueEnum: {
+        1: {
+          text: (
+            <FormattedMessage
+              id="refund"
+              defaultMessage="refund"
+            />
+          ),
+          status: 'refund',
+        },
+        2: {
+          text: (
+            <FormattedMessage id="repair" defaultMessage="repair" />
+          ),
+          status: 'repair',
+        },
+        3: {
+          text: (
+            <FormattedMessage id="recycle" defaultMessage="recycle" />
+          ),
+          status: 'recycle',
+        }
+      },
+  },
+    {
         title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
         dataIndex: 'status',
         hideInForm: true,
         valueEnum: {
           0: {
             text: (
+              // <Badge status="processing" text="进行中" />
               <FormattedMessage
                 id="pages.searchTable.nameStatus.default"
                 defaultMessage="Shut down"
@@ -111,6 +165,7 @@ const TableList: React.FC = () => {
             status: 'outStorage',
           }
         },
+        
     },
     {
         title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="auditStatus" />,
@@ -174,6 +229,7 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
+        // update
         <UpdateForm
           trigger={
             <a>
@@ -184,18 +240,45 @@ const TableList: React.FC = () => {
           onOk={actionRef.current?.reload}
           values={record}
         />,
-        <a key="subscribeAlert">
+        // delete
+        <a key="subscribeAlert"  
+          onClick={() => {
+            console.log(record,"record---------")
+            Modal.confirm({
+              title: 'delete order',
+              content: 'Are you sure you want to delete this order？',
+              okText: 'yes',
+              cancelText: 'cancel',
+              onOk: () => deleteItem(record.id),
+            });
+        }}>
           <FormattedMessage
             id="delete"
             defaultMessage="delete"
           />
         </a>,
-         <a key="distribute">
-         <FormattedMessage
-           id="distribute"
-           defaultMessage="distribute"
-         />
-       </a>,
+
+        // distribute
+        <DistributeForm 
+          trigger={
+            <a>
+              <FormattedMessage id="distribute" defaultMessage="distribute" />
+            </a>
+          }
+          key="config"
+          onOk={actionRef.current?.reload}
+          values={record}
+        />,
+
+
+      //    <a key="distribute" onClick={()=>{
+       
+      //    }}>
+      //    <FormattedMessage
+      //      id="distribute"
+      //      defaultMessage="distribute"
+      //    />
+      //  </a>,
         <a key="audit">
             <FormattedMessage
             id="audit"
@@ -205,6 +288,22 @@ const TableList: React.FC = () => {
       ],
     },
   ];
+
+  const deleteItem = async (id: string) => {
+    
+    let res = await deleteOrerById(id)
+    if(res.code === 200){
+      messageApi.success('Deleted successfully and will refresh soon');
+      setTimeout(() =>{
+        window.location.reload()
+      },2000)
+      
+      // getInStorageList({pageSize: 20,current: 1})
+    } else {
+      messageApi.error('Delete failed, please try again');
+    }
+    console.log(res,"delete res")
+  }; 
 
   /**
    *  Delete node

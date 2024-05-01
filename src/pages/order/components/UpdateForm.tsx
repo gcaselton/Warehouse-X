@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Image, Upload } from 'antd';
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import { Image, Upload,Cascader } from 'antd';
+import type { GetProp, UploadFile, UploadProp } from 'antd';
 import { message, Modal,Button } from 'antd';
-import { addRule } from '@/services/ant-design-pro/api';
+import { updateProduct } from '@/services/ant-design-pro/api';
 import { ActionType, ModalForm, ProFormText, ProFormTextArea,  ProFormRadio,ProForm } from '@ant-design/pro-components';
 
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
@@ -19,13 +19,150 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
+   // storeLocation
+   const options: Option[] = [
+    {
+      value: 'Warehouse return',
+      label: 'Warehouse return',
+      children: [
+        {
+          value: 'section A',
+          label: 'section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'section B',
+          label: 'section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'Warehouse repair',
+      label: 'Warehouse repair',
+      children: [
+        {
+          value: 'section A',
+          label: 'section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'section B',
+          label: 'section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'Warehouse recycle',
+      label: 'Warehouse recycle',
+      children: [
+        {
+          value: 'section A',
+          label: 'section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'section B',
+          label: 'section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+      ],
+    },
+  ];
+  const onChange = (value: (string | number)[]) => {
+    console.log(value);
+  };
 const CreateForm: FC<CreateFormProps> = (props) => {
   console.log({props});
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(true);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([
    
-  
+    {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: props.values?.sliderUrls,
+    },
   ]);
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -55,14 +192,14 @@ const CreateForm: FC<CreateFormProps> = (props) => {
    * */
   const intl = useIntl();
 
-  const { run, loading } = useRequest(addRule, {
+  const { run, loading } = useRequest(updateProduct, {
     manual: true,
     onSuccess: () => {
-      messageApi.success('Added successfully');
+      messageApi.success('updated successfully');
       reload?.();
     },
     onError: () => {
-      messageApi.error('Adding failed, please try again!');
+      messageApi.error('updated failed, please try again!');
     },
   });
 
@@ -85,8 +222,16 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         width="800px"
         modalProps={{ okButtonProps: { loading } }}
         onFinish={async (value) => {
-          await run({ data: value as API.RuleListItem });
-
+          let formData = {
+            id:props.values?.id,
+            name:value?.name,
+            sliderUrls:value?.image?.file?.response?.data || "",
+            categoryId:Number(value?.categoryId),
+            orderId:Number(value?.orderId),
+            storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
+            status:1
+          }
+          await run(formData);
           return true;
         }}
       >
@@ -183,21 +328,41 @@ const CreateForm: FC<CreateFormProps> = (props) => {
                   onPreview={handlePreview}
                   onChange={handleChange}
                 >
-                {fileList.length >= 8 ? null : uploadButton}
+                {/* {fileList.length >= 8 ? null : uploadButton} */}
               </Upload>
             </ProForm.Item>
           
       {previewImage && (
         <Image
-          wrapperStyle={{ display: 'none' }}
+          //wrapperStyle={{ display: 'none' }}
           preview={{
             visible: previewOpen,
             onVisibleChange: (visible) => setPreviewOpen(visible),
             afterOpenChange: (visible) => !visible && setPreviewImage(''),
           }}
-          src={previewImage}
+          src={props.values?.sliderUrls}
         />
       )}
+        <ProForm.Item 
+        rules={[
+          {
+               required: true,
+               message: (
+                 <FormattedMessage
+                   id="storeLocation"
+                   defaultMessage="storeLocation is required"
+                 />
+               ),
+          },
+        ]}
+           width="md"
+           name="storeLocation"
+           label={intl.formatMessage({
+             id: 'storeLocation',
+             defaultMessage: 'storeLocation',
+           })}>
+            <Cascader options={options} onChange={onChange} placeholder="Please select" />
+        </ProForm.Item>
         <ProFormTextArea 
           width="md" 
           name="desc"
