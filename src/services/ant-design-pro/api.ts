@@ -29,6 +29,17 @@ export async function currentUser(options?: { [key: string]: any }) {
   });
 }
 
+// get user staff
+export async function getStaffLit(options?: { [key: string]: any }) {
+  return request(`/admin/system/sysUser/findByPage/${1}/${10}`, {
+    method: 'GET',
+    headers: {
+      token:TOKEN
+    },
+    ...(options || {}),
+  });
+}
+
 // updateSysUser
 export async function updateUserInfo(options?: { [key: string]: any }) {
   return request<{
@@ -40,12 +51,23 @@ export async function updateUserInfo(options?: { [key: string]: any }) {
 }
 
 // saveSysUser
-export async function saveUserInfo(options?: { [key: string]: any }) {
-  return request<{
-    data: API.userInfo;
-  }>('/admin/system/sysUser/saveSysUser', {
+// export async function updateProduct(body, options?: { [key: string]: any }) {
+//   return request<API.LoginResult>('/admin/product/product/updateById', {
+//     method: 'POST',
+//     headers: {
+//       token:TOKEN,
+//     },
+//     data: body,
+//     ...(options || {}),
+//   });
+export async function addStaff(body,options?: { [key: string]: any }) {
+  return request('/admin/system/sysUser/saveSysUser', {
     method: 'POST',
-    ...(options || {}),
+    headers: {
+      token:TOKEN,
+    },
+    data: body,
+    // ...(options || {}),
   });
 }
 // delete user By Id

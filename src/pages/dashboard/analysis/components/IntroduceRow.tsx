@@ -24,14 +24,15 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
       <Col {...topColResponsiveProps}>
         <ChartCard
           bordered={false}
-          title="Total sales "
+          title="Total inStorage"
           action={
             <Tooltip title="Indicator Description">
               <InfoCircleOutlined />
             </Tooltip>
           }
           loading={loading}
-          total={() => <Yuan>126560</Yuan>}
+          // total={() => <Yuan>126560</Yuan>}
+          total={() => 25637}
           footer={<Field label="daily sales" value={`$${numeral(12423).format('0,0')}`} />}
           contentHeight={46}
         >
@@ -85,7 +86,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
         <ChartCard
           bordered={false}
           loading={loading}
-          title="return"
+          title="repair"销售额
           action={
             <Tooltip title="Indicator Description">
               <InfoCircleOutlined />
@@ -116,7 +117,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
               <InfoCircleOutlined />
             </Tooltip>
           }
-          total="78%"
+          total="10231"
           footer={
             <div
               style={{
@@ -141,7 +142,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
           }
           contentHeight={46}
         >
-          <Progress percent={78} strokeColor={{ from: '#108ee9', to: '#87d068' }} status="active" />
+          <Progress percent={39} strokeColor={{ from: '#108ee9', to: '#87d068' }} status="active" />
         </ChartCard>
       </Col>
     </Row>
