@@ -58,6 +58,11 @@ export default [
         path: '/dashboard/analysis',
         component: './dashboard/analysis',
       },
+      {
+        name: 'Map',
+        path: '/dashboard/map',
+        component: './dashboard/map/index.tsx',
+      }
       // {
       //   name: 'monitor',
       //   icon: 'smile',
@@ -235,18 +240,18 @@ export default [
   //   ],
   // },
   {
-    name:"order",
-    path:"/order",
+    name:"Returns",
+    path:"/returns",
     icon: 'table',
     routes:[
       {
-        path: '/order',
-        redirect: '/order/in-storage',
+        path: '/returns',
+        redirect: '/returns/in-storage',
       },
       {
         name: 'in-storage',
         // icon: 'smile',
-        path: '/order/in-storage',
+        path: '/returns/in-storage',
         component: './order/in-storage',
       },
     ]

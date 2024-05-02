@@ -191,10 +191,10 @@
           </div>
         </div>
         <div class="loading-title">
-          loading
+          Loading...
         </div>
         <div class="loading-sub-title">
-        The initial loading of resources may take a considerable amount of time, please be patient and wait
+        Please wait
         </div>
       </div>
     `;
