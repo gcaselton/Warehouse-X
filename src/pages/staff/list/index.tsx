@@ -1,4 +1,4 @@
-import { removeRule, rule,getStaffLit } from '@/services/ant-design-pro/api';
+import { removeRule, rule,getStaffLit,deleteUserByID } from '@/services/ant-design-pro/api';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -7,11 +7,11 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
+import { Button, Drawer, Input, message,Modal } from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
-
+import AssignForm  from '../components/AssignForm';
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
 
@@ -48,7 +48,7 @@ const TableList: React.FC = () => {
           defaultMessage="userName"
         />
       ),
-      dataIndex: 'userName',
+      dataIndex: 'username',
       render: (dom, entity) => {
         return (
           <a
@@ -75,15 +75,15 @@ const TableList: React.FC = () => {
         0: {
           text: (
             <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
+              id="off"
+              defaultMessage="off"
             />
           ),
           status: 'off',
         },
         1: {
           text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
+            <FormattedMessage id="on" defaultMessage="on" />
           ),
           status: 'on',
         }
@@ -102,22 +102,58 @@ const TableList: React.FC = () => {
         <UpdateForm
           trigger={
             <a>
-              <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
+              <FormattedMessage id="update" defaultMessage="update" />
             </a>
           }
           key="config"
           onOk={actionRef.current?.reload}
           values={record}
         />,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
+        <AssignForm
+          trigger={
+            <a>
+              <FormattedMessage id="assignRole" defaultMessage="assignRole" />
+            </a>
+          }
+          key="config"
+          onOk={actionRef.current?.reload}
+          values={record}
+        />,
+        <a key="subscribeAlert"
+        onClick={() => {
+          console.log(record,"record---------")
+          Modal.confirm({
+            title: 'delete staff',
+            content: 'Are you sure you want to delete this staff',
+            okText: 'yes',
+            cancelText: 'cancel',
+            onOk: () => deleteItem(record.id),
+          });
+      }}>
           <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
+            id="delete"
+            defaultMessage="delete"
           />
         </a>,
       ],
     },
   ];
+
+
+  const deleteItem = async (id: number) => {
+    
+    let res = await deleteUserByID(id)
+    if(res.code === 200){
+      messageApi.success('Deleted successfully and will refresh soon');
+      setTimeout(() =>{
+        window.location.reload()
+      },2000)
+      
+    } else {
+      messageApi.error('Delete failed, please try again');
+    }
+    console.log(res,"delete res")
+  }; 
 
   /**
    *  Delete node
@@ -156,7 +192,24 @@ const TableList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [<CreateForm key="create" reload={actionRef.current?.reload} />]}
-        request={getStaffLit}
+        // request={getStaffLit}
+        request = {async (
+          params: T & {
+            pageSize: number;
+            current: number;
+          },
+          sort,
+          filter,
+        ) => {
+          console.log('params-------------',params)
+          const msg = await getStaffLit(params);
+          console.log('getStaffLit',msg);
+          return {
+            data: msg?.data?.list,
+            success: msg?.code === 200,
+            total: msg?.data?.total,
+          };
+        }}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {

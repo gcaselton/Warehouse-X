@@ -113,7 +113,7 @@ const Page = () => {
         backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
         title="Warehouse X"
         containerStyle={{
-          backgroundColor: 'rgba(0, 0, 0,0.65)',
+          backgroundColor: 'transparent',
           backdropFilter: 'blur(4px)',
         }}
         subTitle=""

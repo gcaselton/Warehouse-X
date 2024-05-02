@@ -21,7 +21,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
 
   const { run, loading } = useRequest(addStaff, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
       messageApi.success('Added successfully');
       reload?.();
     },
@@ -77,10 +77,23 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           console.log(value,'add staff')
           let formdata = {
             ...value,
-            status:value?.status ? 1 : 0
+            name:"",
+            status:value?.status ? 1 : 0,
+            password:"",
+            description:"",
           }
-          await run({ ...formdata });
-
+          let res = await addStaff({ ...formdata });
+          console.log('addNewRole',res)
+          if(res?.code === 200){
+            messageApi.success('Added successfully');
+            setTimeout(() =>{
+              window.location.reload()
+            },2000)
+          } else if(res?.code === 209){
+            messageApi.error('staff already exists!');
+          } else {
+            messageApi.error('Adding failed, please try again!');
+          }
           return true;
         }}
       >
@@ -97,7 +110,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             },
           ]}
           width="md"
-          name="name"
+          name="username"
           label={intl.formatMessage({
             id: 'userName',
             defaultMessage: 'userName',

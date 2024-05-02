@@ -30,11 +30,14 @@ export async function currentUser(options?: { [key: string]: any }) {
 }
 
 // get user staff
-export async function getStaffLit(options?: { [key: string]: any }) {
+export async function getStaffLit(params,options?: { [key: string]: any }) {
   return request(`/admin/system/sysUser/findByPage/${1}/${10}`, {
     method: 'GET',
     headers: {
       token:TOKEN
+    },
+    params: {
+      username:params?.username
     },
     ...(options || {}),
   });
@@ -67,15 +70,46 @@ export async function addStaff(body,options?: { [key: string]: any }) {
       token:TOKEN,
     },
     data: body,
-    // ...(options || {}),
+    ...(options || {}),
   });
 }
-// delete user By Id
-export async function deleteUserByID(options?: { [userId: any]: any }) {
-  return request<{
-    data: API.userInfo;
-  }>('/admin/system/sysUser/deleteById', {
+
+export async function updateStaff(body,options?: { [key: string]: any }) {
+  return request('/admin/system/sysUser/updateSysUser', {
+    method: 'PUT',
+    headers: {
+      token:TOKEN,
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+// assign role
+export async function assignRole(body,options?: { [key: string]: any }) {
+  let res = request<API.LoginResult>('/admin/system/sysRoleMenu/doAssign', {
+    method: 'POST',
+    headers: {
+      token:TOKEN,
+    },
+    data: body,
+    ...(options || {}),
+  });
+  console.log(res,'doAssign res')
+  return res;
+}
+
+// delete user ById
+export async function deleteUserByID( params: {
+  // query
+  id?: number;
+},options?: { [userId: any]: any }) {
+ 
+  return request(`/admin/system/sysUser/deleteById/${params}`, {
     method: 'DELETE',
+    headers: {
+      token:TOKEN
+    },
     ...(options || {}),
   });
 }
@@ -113,7 +147,7 @@ export async function addProduct(body, options?: { [key: string]: any }) {
 
 // update product
 export async function updateProduct(body, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('/admin/product/product/updateById', {
+  let res =  request<API.LoginResult>('/admin/product/product/updateById', {
     method: 'POST',
     headers: {
       token:TOKEN,
@@ -121,6 +155,8 @@ export async function updateProduct(body, options?: { [key: string]: any }) {
     data: body,
     ...(options || {}),
   });
+  console.log(res,'updateProduct res')
+  return res
 }
 
 
@@ -213,7 +249,6 @@ export async function deleteOrerById(
   params: {
     // query
     id?: number;
-  
   },
   options?: { [key: string]: any },
 ){
@@ -222,7 +257,6 @@ export async function deleteOrerById(
   
     method: 'DELETE',
     params: {
-      
     },
     headers: {
       token:TOKEN
