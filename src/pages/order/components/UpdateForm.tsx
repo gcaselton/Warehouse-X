@@ -231,7 +231,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
             status:1
           }
-          await run(formData);
+          let res = await run(formData);
+          console.log(res,"updated-----")
           return true;
         }}
       >
