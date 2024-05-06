@@ -37,7 +37,7 @@ export async function getStaffLit(params,options?: { [key: string]: any }) {
       token:TOKEN
     },
     params: {
-      username:params?.username
+      keyword:params?.username
     },
     ...(options || {}),
   });

@@ -12,7 +12,12 @@ import React, { useCallback, useRef, useState } from 'react';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
 import AssignForm  from '../components/AssignForm';
+import { history, useModel } from '@umijs/max';
+
 const TableList: React.FC = () => {
+  const { initialState } = useModel('@@initialState');
+const { currentUser } = initialState || {};
+console.log(currentUser,"currentUser--------")
   const actionRef = useRef<ActionType>();
 
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -66,6 +71,7 @@ const TableList: React.FC = () => {
       title: <FormattedMessage id="phone" defaultMessage="phone" />,
       dataIndex: 'phone',
       valueType: 'textarea',
+      hideInForm: true,
     },
     {
       title: <FormattedMessage id="status" defaultMessage="status" />,
@@ -101,7 +107,8 @@ const TableList: React.FC = () => {
       render: (_, record) => [
         <UpdateForm
           trigger={
-            <a>
+            <a
+              style={{display: record?.roleId === 1 ? 'inline' : 'none'}}>
               <FormattedMessage id="update" defaultMessage="update" />
             </a>
           }
@@ -110,8 +117,10 @@ const TableList: React.FC = () => {
           values={record}
         />,
         <AssignForm
+
+        
           trigger={
-            <a>
+            <a >
               <FormattedMessage id="assignRole" defaultMessage="assignRole" />
             </a>
           }
@@ -119,17 +128,19 @@ const TableList: React.FC = () => {
           onOk={actionRef.current?.reload}
           values={record}
         />,
-        <a key="subscribeAlert"
-        onClick={() => {
-          console.log(record,"record---------")
-          Modal.confirm({
-            title: 'delete staff',
-            content: 'Are you sure you want to delete this staff',
-            okText: 'yes',
-            cancelText: 'cancel',
-            onOk: () => deleteItem(record.id),
-          });
-      }}>
+        <a 
+          key="subscribeAlert"
+          // style={{display: record?.roleId === 1 ? 'inline' : 'none'}}
+          onClick={() => {
+            console.log(record,"record---------")
+            Modal.confirm({
+              title: 'delete staff',
+              content: 'Are you sure you want to delete this staff',
+              okText: 'yes',
+              cancelText: 'cancel',
+              onOk: () => deleteItem(record.id),
+            });
+        }}>
           <FormattedMessage
             id="delete"
             defaultMessage="delete"

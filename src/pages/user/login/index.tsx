@@ -81,6 +81,8 @@ const Page = () => {
         const urlParams = new URL(window.location.href).searchParams;
         window.location.href = urlParams.get('redirect') || '/';
         return;
+      } else {
+        messageApi.error('Login failed, please try again!');
       }
       console.log({msg});
       // 如果失败去设置用户错误信息

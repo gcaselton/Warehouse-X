@@ -119,17 +119,17 @@ const Analysis: FC<AnalysisProps> = () => {
           }}
         >
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Suspense fallback={null}>
+            {/* <Suspense fallback={null}>
               <TopSearch
                 loading={loading}
                 visitData2={data?.visitData2 || []}
                 searchData={data?.searchData || []}
                 dropdownGroup={dropdownGroup}
               />
-            </Suspense>
+            </Suspense> */}
           </Col>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Suspense fallback={null}>
+            {/* <Suspense fallback={null}>
               <ProportionSales
                 dropdownGroup={dropdownGroup}
                 salesType={salesType}
@@ -137,11 +137,11 @@ const Analysis: FC<AnalysisProps> = () => {
                 salesPieData={salesPieData || []}
                 handleChangeSalesType={handleChangeSalesType}
               />
-            </Suspense>
+            </Suspense> */}
           </Col>
         </Row>
 
-        <Suspense fallback={null}>
+        {/* <Suspense fallback={null}>
           <OfflineData
             activeKey={activeKey}
             loading={loading}
@@ -149,7 +149,7 @@ const Analysis: FC<AnalysisProps> = () => {
             offlineChartData={data?.offlineChartData || []}
             handleTabChange={handleTabChange}
           />
-        </Suspense>
+        </Suspense> */}
       </>
     </GridContent>
   );
