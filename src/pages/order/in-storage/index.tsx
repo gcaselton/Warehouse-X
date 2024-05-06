@@ -68,11 +68,10 @@ const TableList: React.FC = () => {
       title: (
         <FormattedMessage
           id="pages.searchTable.productName"
-          defaultMessage="productName"
+          defaultMessage="Product Name"
         />
       ),
       dataIndex: 'name',
-      tip: 'The rule name is the unique key',
       render: (dom, entity) => {
         // debugger
         // 
@@ -96,13 +95,12 @@ const TableList: React.FC = () => {
     {
       title: (
         <FormattedMessage
-          id="pages.searchTable.orderId"
-          defaultMessage="Number of service calls"
+          id="pages.searchTable.serialId"
+          defaultMessage="Serial Number"
         />
       ),
-      dataIndex: 'orderId',
-      sorter: true,
-      hideInForm: true,
+      dataIndex: 'serialId',
+      hideInForm: false,
       renderText: (val: string) =>
         `${val}${intl.formatMessage({
           id: 'pages.searchTable.tenThousand',
@@ -110,7 +108,7 @@ const TableList: React.FC = () => {
         })}`,
     },
     {
-      title: <FormattedMessage id="returnType" defaultMessage="returnType" />,
+      title: <FormattedMessage id="returnType" defaultMessage="Return Type" />,
       dataIndex: 'categoryId',
       hideInForm: true,
       valueEnum: {
@@ -118,57 +116,27 @@ const TableList: React.FC = () => {
           text: (
             <FormattedMessage
               id="refund"
-              defaultMessage="refund"
+              defaultMessage="Refund"
             />
           ),
           status: 'refund',
         },
         2: {
           text: (
-            <FormattedMessage id="repair" defaultMessage="repair" />
+            <FormattedMessage id="repair" defaultMessage="Repair" />
           ),
           status: 'repair',
         },
         3: {
           text: (
-            <FormattedMessage id="recycle" defaultMessage="recycle" />
+            <FormattedMessage id="recycle" defaultMessage="Recycle" />
           ),
           status: 'recycle',
         }
       },
   },
     {
-        title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
-        dataIndex: 'status',
-        hideInForm: true,
-        valueEnum: {
-          0: {
-            text: (
-              // <Badge status="processing" text="进行中" />
-              <FormattedMessage
-                id="pages.searchTable.nameStatus.default"
-                defaultMessage="Shut down"
-              />
-            ),
-            status: 'Default',
-          },
-          1: {
-            text: (
-              <FormattedMessage id="pages.searchTable.nameStatus.inStorage" defaultMessage="Running" />
-            ),
-            status: 'inStorage',
-          },
-          2: {
-            text: (
-              <FormattedMessage id="pages.searchTable.nameStatus.outStorage" defaultMessage="Online" />
-            ),
-            status: 'outStorage',
-          }
-        },
-        
-    },
-    {
-        title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="auditStatus" />,
+        title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="Audit Status" />,
         dataIndex: 'status',
         hideInForm: true,
         valueEnum: {
@@ -176,22 +144,22 @@ const TableList: React.FC = () => {
             text: (
               <FormattedMessage
                 id="pages.searchTable.auditStatus.default"
-                defaultMessage="Shut down"
+                defaultMessage="In Process"
               />
             ),
-            status: 'Default',
+            status: 'In Process',
           },
           1: {
             text: (
-              <FormattedMessage id="pages.searchTable.auditStatus.success" defaultMessage="success" />
+              <FormattedMessage id="pages.searchTable.auditStatus.success" defaultMessage="Authorised" />
             ),
-            status: 'inStorage',
+            status: 'Authorised',
           },
           2: {
             text: (
-              <FormattedMessage id="pages.searchTable.auditStatus.refuse" defaultMessage="refuse" />
+              <FormattedMessage id="pages.searchTable.auditStatus.refuse" defaultMessage="Denied" />
             ),
-            status: 'outStorage',
+            status: 'Denied',
           }
         },
       },
@@ -199,7 +167,7 @@ const TableList: React.FC = () => {
       title: (
         <FormattedMessage
           id="pages.searchTable.createTime"
-          defaultMessage="Last scheduled time"
+          defaultMessage="Date and Time"
         />
       ),
       sorter: true,
@@ -225,7 +193,7 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Options" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -233,7 +201,7 @@ const TableList: React.FC = () => {
         <UpdateForm
           trigger={
             <a>
-              <FormattedMessage id="pages.searchTable.config" defaultMessage="update" />
+              <FormattedMessage id="pages.searchTable.config" defaultMessage="Update" />
             </a>
           }
           key="config"
@@ -245,16 +213,16 @@ const TableList: React.FC = () => {
           onClick={() => {
             console.log(record,"record---------")
             Modal.confirm({
-              title: 'delete order',
-              content: 'Are you sure you want to delete this order？',
-              okText: 'yes',
-              cancelText: 'cancel',
+              title: 'Delete Return',
+              content: 'Are you sure you want to delete this return？',
+              okText: 'Yes',
+              cancelText: 'Cancel',
               onOk: () => deleteItem(record.id),
             });
         }}>
           <FormattedMessage
             id="delete"
-            defaultMessage="delete"
+            defaultMessage="Delete"
           />
         </a>,
 
@@ -262,23 +230,17 @@ const TableList: React.FC = () => {
         <DistributeForm 
           trigger={
             <a>
-              <FormattedMessage id="distribute" defaultMessage="distribute" />
+              <FormattedMessage id="distribute" defaultMessage="Distribute" />
             </a>
           }
           key="config"
           onOk={actionRef.current?.reload}
           values={record}
         />,
-
-
-      //    <a key="distribute" onClick={()=>{
+         <a key="distribute" onClick={()=>{
        
-      //    }}>
-      //    <FormattedMessage
-      //      id="distribute"
-      //      defaultMessage="distribute"
-      //    />
-      //  </a>,
+         }}>
+       </a>,
         <a key="audit">
             <FormattedMessage
             id="audit"
@@ -394,13 +356,13 @@ const TableList: React.FC = () => {
           >
             <FormattedMessage
               id="pages.searchTable.batchDeletion"
-              defaultMessage="Batch deletion"
+              defaultMessage="Delete selected"
             />
           </Button>
           <Button type="primary">
             <FormattedMessage
               id="pages.searchTable.batchApproval"
-              defaultMessage="Batch approval"
+              defaultMessage="Audit selected"
             />
           </Button>
         </FooterToolbar>

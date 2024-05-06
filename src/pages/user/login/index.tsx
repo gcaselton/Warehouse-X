@@ -38,6 +38,12 @@ const iconStyles: CSSProperties = {
   cursor: 'pointer',
 };
 
+const playLoginSound = () => {
+  console.log('Playing login sound');
+  const audio = new Audio('/loginSound.wav');
+  audio.play();
+};
+
 const Page = () => {
   // const [loginType, setLoginType] = useState<LoginType>('phone');
   const intl = useIntl();
@@ -80,6 +86,7 @@ const Page = () => {
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         window.location.href = urlParams.get('redirect') || '/';
+        playLoginSound();
         return;
       }
       console.log({msg});
@@ -146,11 +153,11 @@ const Page = () => {
                   />
                 ),
               }}
-              placeholder={'userName'}
+              placeholder={'Username'}
               rules={[
                 {
                   required: true,
-                  message: 'userName is required!',
+                  message: 'UserName is required!',
                 },
               ]}
             />
@@ -167,11 +174,11 @@ const Page = () => {
                   />
                 ),
               }}
-              placeholder={'password'}
+              placeholder={'Password'}
               rules={[
                 {
                   required: true,
-                  message: 'password is required!',
+                  message: 'Password is required!',
                 },
               ]}
             />

@@ -24,9 +24,9 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
       <Col {...topColResponsiveProps}>
         <ChartCard
           bordered={false}
-          title="Total inStorage"
+          title="Total Returns"
           action={
-            <Tooltip title="Indicator Description">
+            <Tooltip title="Total number of returned items in the warehouse">
               <InfoCircleOutlined />
             </Tooltip>
           }
@@ -56,9 +56,9 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
         <ChartCard
           bordered={false}
           loading={loading}
-          title="refund"
+          title="Refund"
           action={
-            <Tooltip title="Indicator Description">
+            <Tooltip title="Total items being processed for refund">
               <InfoCircleOutlined />
             </Tooltip>
           }
@@ -86,9 +86,9 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
         <ChartCard
           bordered={false}
           loading={loading}
-          title="repair"销售额
+          title="Repair"
           action={
-            <Tooltip title="Indicator Description">
+            <Tooltip title="Total items being processed for repairs">
               <InfoCircleOutlined />
             </Tooltip>
           }
@@ -111,9 +111,9 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
         <ChartCard
           loading={loading}
           bordered={false}
-          title="recycle"
+          title="Recycle"
           action={
-            <Tooltip title="Indicator Description">
+            <Tooltip title="Total items being processed for recycling">
               <InfoCircleOutlined />
             </Tooltip>
           }

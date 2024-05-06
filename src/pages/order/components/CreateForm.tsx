@@ -61,12 +61,12 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   // storeLocation
   const options: Option[] = [
     {
-      value: 'Warehouse return',
-      label: 'Warehouse return',
+      value: 'Refunds',
+      label: 'Refunds',
       children: [
         {
-          value: 'section A',
-          label: 'section A',
+          value: 'Section A',
+          label: 'Section A',
           children: [
             {
               value: 'A10',
@@ -83,8 +83,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           ],
         },
         {
-          value: 'section B',
-          label: 'section B',
+          value: 'Section B',
+          label: 'Section B',
           children: [
             {
               value: 'B10',
@@ -97,18 +97,36 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             {
               value: 'B30',
               label: 'B30',
+            },
+          ],
+        },
+        {
+          value: 'Section C',
+          label: 'Section C',
+          children: [
+            {
+              value: 'C10',
+              label: 'C10',
+            },
+            {
+              value: 'C20',
+              label: 'C20',
+            },
+            {
+              value: 'C30',
+              label: 'C30',
             },
           ],
         },
       ],
     },
     {
-      value: 'Warehouse repair',
-      label: 'Warehouse repair',
+      value: 'Repairs',
+      label: 'Repairs',
       children: [
         {
-          value: 'section A',
-          label: 'section A',
+          value: 'Section A',
+          label: 'Section A',
           children: [
             {
               value: 'A10',
@@ -125,8 +143,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           ],
         },
         {
-          value: 'section B',
-          label: 'section B',
+          value: 'Section B',
+          label: 'Section B',
           children: [
             {
               value: 'B10',
@@ -139,18 +157,36 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             {
               value: 'B30',
               label: 'B30',
+            },
+          ],
+        },
+        {
+          value: 'Section C',
+          label: 'Section C',
+          children: [
+            {
+              value: 'C10',
+              label: 'C10',
+            },
+            {
+              value: 'C20',
+              label: 'C20',
+            },
+            {
+              value: 'C30',
+              label: 'C30',
             },
           ],
         },
       ],
     },
     {
-      value: 'Warehouse recycle',
-      label: 'Warehouse recycle',
+      value: 'Recycling',
+      label: 'Recycling',
       children: [
         {
-          value: 'section A',
-          label: 'section A',
+          value: 'Section A',
+          label: 'Section A',
           children: [
             {
               value: 'A10',
@@ -167,8 +203,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           ],
         },
         {
-          value: 'section B',
-          label: 'section B',
+          value: 'Section B',
+          label: 'Section B',
           children: [
             {
               value: 'B10',
@@ -181,6 +217,24 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             {
               value: 'B30',
               label: 'B30',
+            },
+          ],
+        },
+        {
+          value: 'Section C',
+          label: 'Section C',
+          children: [
+            {
+              value: 'C10',
+              label: 'C10',
+            },
+            {
+              value: 'C20',
+              label: 'C20',
+            },
+            {
+              value: 'C30',
+              label: 'C30',
             },
           ],
         },
@@ -206,11 +260,11 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   const { run, loading } = useRequest(addProduct, {
     manual: true,
     onSuccess: () => {
-      messageApi.success('Added successfully');
+      messageApi.success('Return added successfully!');
       reload?.();
     },
     onError: () => {
-      messageApi.error('Adding failed, please try again!');
+      messageApi.error('Adding failed, please try again');
     },
   });
 
@@ -220,11 +274,11 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       <ModalForm
         title={intl.formatMessage({
           id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'in storage',
+          defaultMessage: 'New Return',
         })}
         trigger={
           <Button type="primary" icon={<PlusOutlined />}>
-            <FormattedMessage id="inStorage" defaultMessage="inStorage" />
+            <FormattedMessage id="New Return" defaultMessage=" New Return" />
           </Button>
         }
         layout="horizontal"
@@ -239,9 +293,10 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             name:value?.name,
             sliderUrls:value?.image?.file?.response?.data || "",
             categoryId:Number(value?.categoryId),
-            orderId:Number(value?.orderId),
+            serialId:Number(value?.serialId),
             storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
-            status:1
+            status:1,
+            postcode:value?.postcode
           }
           await run(formData);
 
@@ -255,7 +310,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               message: (
                 <FormattedMessage
                   id="pages.newOrder.productName.required"
-                  defaultMessage="product name is required"
+                  defaultMessage="Product name is required"
                 />
               ),
             },
@@ -264,7 +319,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           name="name"
           label={intl.formatMessage({
             id: 'pages.newOrder.productName',
-            defaultMessage: 'productName',
+            defaultMessage: 'Product Name',
           })}
         />
         <ProFormText
@@ -274,13 +329,13 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               message: (
                 <FormattedMessage
                   id="pages.newOrder.serialId.required"
-                  defaultMessage="serialId is required"
+                  defaultMessage="Serial Number is required"
                 />
               ),
             },
           ]}
           width="md"
-          name="orderId"
+          name="serialId"
           label={intl.formatMessage({
             id: 'pages.newOrder.serialId',
             defaultMessage: 'serialId',
@@ -292,8 +347,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
                 required: true,
                 message: (
                   <FormattedMessage
-                    id="pages.newOrder.serialId.required"
-                    defaultMessage="serialId is required"
+                    id="pages.newOrder.orderType.required"
+                    defaultMessage="Return Type is required"
                   />
                 ),
               },
@@ -301,33 +356,21 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             options={[
               {
                 value: '1',
-                label: 'refund',
+                label: 'Refund',
               },
               {
                 value: '2',
-                label: 'repair',
+                label: 'Repair',
               },
               {
                 value: '3',
-                label: 'recycle',
+                label: 'Recycle',
               },
             ]}
-            label="returnType"
+            label="Return Type"
             name="categoryId"
           />
             <ProForm.Item 
-            
-             rules={[
-              {
-                required: true,
-                message: (
-                  <FormattedMessage
-                    id="pages.newOrder.image.required"
-                    defaultMessage="image is required"
-                  />
-                ),
-              },
-            ]}
             width="md"
             name="image"
             label={intl.formatMessage({
@@ -367,25 +410,34 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         />
       )}
       <ProForm.Item 
-        rules={[
-          {
-               required: true,
-               message: (
-                 <FormattedMessage
-                   id="storeLocation"
-                   defaultMessage="storeLocation is required"
-                 />
-               ),
-          },
-        ]}
            width="md"
            name="storeLocation"
            label={intl.formatMessage({
              id: 'storeLocation',
-             defaultMessage: 'storeLocation',
+             defaultMessage: 'Warehouse Location',
            })}>
             <Cascader options={options} onChange={onChange} placeholder="Please select" />
         </ProForm.Item>
+        
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.newOrder.postcode.required"
+                  defaultMessage="Postcode is required"
+                />
+              ),
+            },
+          ]}
+          width="md"
+          name="postcode"
+          label={intl.formatMessage({
+            id: 'pages.newOrder.postcode',
+            defaultMessage: 'Customer postcode',
+          })}
+        />
      
         <ProFormTextArea 
           width="md" 

@@ -8,12 +8,13 @@ import { ActionType, ModalForm, ProFormText, ProFormTextArea,  ProFormRadio,ProF
 
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
 import { FC } from 'react';
+import options from './CreateForm'
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-interface CreateFormProps {
+interface DistributeFormProps {
   reload?: ActionType['reload'];
 }
 
-const CreateForm: FC<CreateFormProps> = (props) => {
+const DistributeForm: FC<DistributeFormProps> = (props) => {
   console.log("distribute form",props)
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -38,11 +39,11 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   const { run, loading } = useRequest(outStorageById, {
     manual: true,
     onSuccess: () => {
-      messageApi.success('outStorage successfully');
+      messageApi.success('Item successfully marked for pickup!');
       reload?.();
     },
     onError: () => {
-      messageApi.error('outStorage failed, please try again!');
+      messageApi.error('Distribution failed, please try again');
     },
   });
 
@@ -52,12 +53,12 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       <ModalForm
         initialValues={props.values}
         title={intl.formatMessage({
-          id: 'out storage',
-          defaultMessage: 'out storage',
+          id: 'Distribute',
+          defaultMessage: 'Distribute',
         })}
         trigger={
-          <a type="primary" icon={<PlusOutlined />}>
-            <FormattedMessage id="out storage" defaultMessage="outStorage" />
+          <a type="primary">
+            <FormattedMessage id="Distribute" defaultMessage="Distribute" />
           </a>
         }
         layout="horizontal"
@@ -76,7 +77,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
            name="categoryId"
            label={intl.formatMessage({
              id: 'address',
-             defaultMessage: 'address',
+             defaultMessage: 'Warehouse Location',
            })}>
             <Select
                 defaultValue={2}
@@ -93,13 +94,14 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         <ProFormTextArea 
           width="md" 
           name="desc"
+          initialValue={'Ready for pickup!'}
           label={intl.formatMessage({
             id: 'pages.newOrder.notes',
-            defaultMessage: 'notes',
+            defaultMessage: 'Notes',
           })} />
       </ModalForm>
     </>
   );
 };
 
-export default CreateForm;
+export default DistributeForm;
