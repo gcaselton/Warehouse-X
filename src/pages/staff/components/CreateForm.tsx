@@ -33,15 +33,15 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   const treeData: TreeDataNode[] = [
     {
       title: 'Manager',
-      key: '0-0',
+      key: 1,
       children: [
         {
           title: 'Senior',
-          key: '0-0-0',
+          key: 2,
           children: [
             {
               title: 'Junior',
-              key: '0-0-0-0',
+              key: 3,
             }
           ],
         }

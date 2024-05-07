@@ -10,6 +10,7 @@ interface CreateFormProps {
 }
 
 const CreateForm: FC<CreateFormProps> = (props) => {
+    console.log(props,"assignform-props");
   const { reload } = props;
   const [readonly, setReadonly] = useState(false);
   const [roleList, setRoleList] = useState([]);
@@ -19,6 +20,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
    * @zh-CN 国际化配置
    * */
   const intl = useIntl();
+
 
   const { run, loading } = useRequest(assignRole, {
     manual: true,
@@ -54,6 +56,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
     console.log('selected', selectedKeys, info);
     setRoleList(selectedKeys)
+
+    // setRoleList([props.values.roleId])
   };
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
@@ -71,7 +75,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         messageApi.success('Assign role successfully');
         reload?.();
         setTimeout(() =>{
-            window.location.reload()
+            // window.location.reload()
           },2000)
       } else {
         messageApi.error('Assign role failed, please try again!');
@@ -83,6 +87,11 @@ const CreateForm: FC<CreateFormProps> = (props) => {
     <>
       {contextHolder}
       <ModalForm
+      initialValues={
+        {
+          ...props.values,
+        }
+      }
         title={intl.formatMessage({
           id: 'assign role',
           defaultMessage: 'assign role',
@@ -108,12 +117,13 @@ const CreateForm: FC<CreateFormProps> = (props) => {
              },
            ]}
            width="md"
-           name="status"
+           name="roleId"
           >
             <Tree
               showLine
               switcherIcon={<DownOutlined />}
-              defaultExpandedKeys={['0-0-0']}
+              defaultExpandedKeys={[props.values?.roleId]}
+              defaultSelectedKeys={[props.values?.roleId]}
               onSelect={onSelect}
               treeData={treeData}
             />

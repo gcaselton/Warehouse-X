@@ -33,15 +33,15 @@ const CreateForm: FC<CreateFormProps> = (props) => {
   const treeData: TreeDataNode[] = [
     {
       title: 'Manager',
-      key: '0-0',
+      key: 1,
       children: [
         {
           title: 'Senior',
-          key: '0-0-0',
+          key: 2,
           children: [
             {
               title: 'Junior',
-              key: '0-0-0-0',
+              key: 3,
             }
           ],
         }
@@ -65,7 +65,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       initialValues={
         {
           ...props.values,
-        status:1
+        // status:1
         }
       }
         title={intl.formatMessage({
@@ -73,9 +73,12 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           defaultMessage: 'add staff',
         })}
         trigger={
+          // <a style={{display: props?.values?.roleId === 1 ? 'inline' : 'none'}} type="primary" icon={<PlusOutlined />}>
+          //   <FormattedMessage id="update" defaultMessage="update" />
+          // </a>
           <a type="primary" icon={<PlusOutlined />}>
-            <FormattedMessage id="update" defaultMessage="update" />
-          </a>
+          <FormattedMessage id="update" defaultMessage="update" />
+        </a>
         }
         width="400px"
         modalProps={{ okButtonProps: { loading } }}
@@ -85,20 +88,22 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             ...value,
             name:"",
             status:value?.status ? 1 : 0,
-            password:"",
+            password:111111,
             description:"",
+            id:props.values.id
           }
+          console.log('formdata-----updateStaff',formdata)
           let res = await updateStaff({ ...formdata });
           console.log('addNewRole',res)
           if(res?.code === 200){
             messageApi.success('Added successfully');
             setTimeout(() =>{
-              // window.location.reload()
+              window.location.reload()
             },2000)
           } else if(res?.code === 209){
-            messageApi.error('staff already exists!');
+            messageApi.error('Update successfully!');
           } else {
-            messageApi.error('Adding failed, please try again!');
+            messageApi.error('Update failed, please try again!');
           }
           return true;
         }}

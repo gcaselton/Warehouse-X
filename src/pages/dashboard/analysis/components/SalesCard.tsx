@@ -37,6 +37,49 @@ const SalesCard = ({
   selectDate: (key: TimeType) => void;
 }) => {
   const { styles } = useStyles();
+  console.log({salesData})
+  const salesData1 = [
+    {x:'Jan', y :123},
+    {x:'Feb', y :345},
+    {x:'Mar', y :576},
+    {x:'Apr', y :354},
+    {x:'May', y :876},
+    {x:'Jun', y :512},
+    {x:'July', y :256},
+    {x:'Aug', y :324},
+    {x:'Sep', y :876},
+    {x:'Oct', y :345},
+    {x:'Nev', y :999},
+    {x:'Dec', y :567},
+  ]
+  const salesData2 = [
+    {x:'Jan', y :675},
+    {x:'Feb', y :357},
+    {x:'Mar', y :643},
+    {x:'Apr', y :875},
+    {x:'May', y :635},
+    {x:'Jun', y :976},
+    {x:'July', y :564},
+    {x:'Aug', y :956},
+    {x:'Sep', y :246},
+    {x:'Oct', y :765},
+    {x:'Nev', y :356},
+    {x:'Dec', y :765},
+  ]
+  const salesData3 = [
+    {x:'Jan', y :674},
+    {x:'Feb', y :234},
+    {x:'Mar', y :555},
+    {x:'Apr', y :999},
+    {x:'May', y :444},
+    {x:'Jun', y :222},
+    {x:'July', y :1000},
+    {x:'Aug', y :890},
+    {x:'Sep', y :555},
+    {x:'Oct', y :874},
+    {x:'Nev', y :467},
+    {x:'Dec', y :678},
+  ]
   return (
     <Card
       loading={loading}
@@ -86,7 +129,7 @@ const SalesCard = ({
                     <div className={styles.salesBar}>
                       <Column
                         height={300}
-                        data={salesData}
+                        data={salesData1}
                         xField="x"
                         yField="y"
                         paddingBottom={12}
@@ -104,7 +147,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '销售量',
+                          name: '',
                           channel: 'y',
                         }}
                       />
@@ -144,7 +187,7 @@ const SalesCard = ({
                     <div className={styles.salesBar}>
                       <Column
                         height={300}
-                        data={salesData}
+                        data={salesData2}
                         xField="x"
                         yField="y"
                         paddingBottom={12}
@@ -162,7 +205,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '销售量',
+                          name: '',
                           channel: 'y',
                         }}
                       />
@@ -202,7 +245,7 @@ const SalesCard = ({
                     <div className={styles.salesBar}>
                       <Column
                         height={300}
-                        data={salesData}
+                        data={salesData3}
                         xField="x"
                         yField="y"
                         paddingBottom={12}
@@ -218,7 +261,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '访问量',
+                          name: '',
                           channel: 'y',
                         }}
                       />
