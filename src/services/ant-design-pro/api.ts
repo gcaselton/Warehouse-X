@@ -29,6 +29,20 @@ export async function currentUser(options?: { [key: string]: any }) {
   });
 }
 
+export async function getRoleById(params,options?: { [key: string]: any }) {
+  return request<{
+    data: API.CurrentUser;
+  }>(`/admin/system/sysUser/getRoleById/${params}`, {
+    method: 'GET',
+    headers: {
+      token:TOKEN
+      // 'Authorization':TOKEN,
+      // 'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    // ...(options || {}),
+  });
+}
+
 // get user staff
 export async function getStaffLit(params,options?: { [key: string]: any }) {
   return request(`/admin/system/sysUser/findByPage/${1}/${10}`, {
@@ -37,7 +51,7 @@ export async function getStaffLit(params,options?: { [key: string]: any }) {
       token:TOKEN
     },
     params: {
-      keyword:params?.username
+      username:params?.username
     },
     ...(options || {}),
   });
@@ -87,12 +101,13 @@ export async function updateStaff(body,options?: { [key: string]: any }) {
 
 // assign role
 export async function assignRole(body,options?: { [key: string]: any }) {
-  let res = request<API.LoginResult>('/admin/system/sysRoleMenu/doAssign', {
+  // const formData = New 
+  let res = request<API.LoginResult>(`/admin/system/sysUser/doAssign`, {
     method: 'POST',
     headers: {
       token:TOKEN,
     },
-    data: body,
+    params: body,
     ...(options || {}),
   });
   console.log(res,'doAssign res')

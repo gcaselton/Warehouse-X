@@ -213,7 +213,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           defaultMessage: 'New rule',
         })}
         trigger={
-          <a>
+          <a style={{display: props.values?.currentUserRoleId <= 2 ? 'inline' : 'none'}}>
             <FormattedMessage id="pages.searchTable.update" defaultMessage="update" />
           </a>
         }
@@ -231,8 +231,16 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
             status:1
           }
-          let res = await run(formData);
+          let res = await updateProduct(formData);
           console.log(res,"updated-----")
+          if(res?.code === 200){
+            messageApi.success('Updated successfully');
+            setTimeout(() =>{
+              window.location.reload()
+            },2000)
+          }  else {
+            messageApi.error('Updated failed, please try again!');
+          }
           return true;
         }}
       >

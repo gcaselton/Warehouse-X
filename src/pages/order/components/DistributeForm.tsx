@@ -56,7 +56,9 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           defaultMessage: 'out storage',
         })}
         trigger={
-          <a type="primary" icon={<PlusOutlined />}>
+          <a
+          style={{display: props.values?.currentUserRoleId <= 2 && props.values?.status === 1 ? 'inline' : 'none'}}
+           type="primary" icon={<PlusOutlined />}>
             <FormattedMessage id="out storage" defaultMessage="outStorage" />
           </a>
         }
@@ -66,7 +68,15 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         modalProps={{ okButtonProps: { loading } }}
         onFinish={async (value) => {
           console.log("form value",value,value.storeLocation)
-          await run(props?.values?.id);
+          let res = await outStorageById(props?.values?.id);
+          if(res.code === 200){
+            messageApi.success('outStorage successfully');  
+            setTimeout(() =>{
+              window.location.reload()
+            },2000)
+          } else {
+            messageApi.error('outStorage failed, please try again!');
+          }
           return true;
         }}
       >
