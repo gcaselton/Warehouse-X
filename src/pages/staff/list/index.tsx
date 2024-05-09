@@ -52,7 +52,7 @@ console.log(currentUser,"currentUser--------")
       title: (
         <FormattedMessage
           id="userName"
-          defaultMessage="userName"
+          defaultMessage="Name"
         />
       ),
       dataIndex: 'username',
@@ -70,13 +70,13 @@ console.log(currentUser,"currentUser--------")
       },
     },
     {
-      title: <FormattedMessage id="phone" defaultMessage="phone" />,
+      title: <FormattedMessage id="phone" defaultMessage="Phone Number" />,
       dataIndex: 'phone',
       valueType: 'textarea',
       hideInForm: true,
     },
     {
-      title: <FormattedMessage id="status" defaultMessage="status" />,
+      title: <FormattedMessage id="status" defaultMessage="Status" />,
       dataIndex: 'status',
       hideInForm: true,
       valueEnum: {
@@ -84,21 +84,21 @@ console.log(currentUser,"currentUser--------")
           text: (
             <FormattedMessage
               id="off"
-              defaultMessage="off"
+              defaultMessage="Off"
             />
           ),
           status: 'off',
         },
         1: {
           text: (
-            <FormattedMessage id="on" defaultMessage="on" />
+            <FormattedMessage id="on" defaultMessage="On" />
           ),
           status: 'on',
         }
       },
     },
     {
-      title: <FormattedMessage id="role" defaultMessage="role" />,
+      title: <FormattedMessage id="role" defaultMessage="Role" />,
       dataIndex: 'role',
       valueType: 'textarea',
     },
@@ -116,7 +116,7 @@ console.log(currentUser,"currentUser--------")
           trigger={
             <a
               style={{display: record?.currentUserRoleId === 1 ? 'inline' : 'none'}}>
-              <FormattedMessage id="update" defaultMessage="update" />
+              <FormattedMessage id="update" defaultMessage="Update" />
             </a>
           }
           key="config"
@@ -129,7 +129,7 @@ console.log(currentUser,"currentUser--------")
         <AssignForm
           trigger={
             <a >
-              <FormattedMessage id="assignRole" defaultMessage="assignRole" />
+              <FormattedMessage id="assignRole" defaultMessage="Assign Role" />
             </a>
           }
           key="config"
@@ -146,15 +146,15 @@ console.log(currentUser,"currentUser--------")
             console.log(record,"record---------")
             Modal.confirm({
               title: 'delete staff',
-              content: 'Are you sure you want to delete this staff',
-              okText: 'yes',
-              cancelText: 'cancel',
+              content: 'Are you sure you want to delete this staff?',
+              okText: 'Yes',
+              cancelText: 'Cancel',
               onOk: () => deleteItem(record.id),
             });
         }}>
           <FormattedMessage
             id="delete"
-            defaultMessage="delete"
+            defaultMessage="Delete"
           />
         </a>,
       ],
@@ -210,8 +210,8 @@ console.log(currentUser,"currentUser--------")
       {contextHolder}
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
+          id: 'Staff',
+          defaultMessage: 'Staff',
         })}
         actionRef={actionRef}
         rowKey="key"

@@ -94,13 +94,13 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       }
         title={intl.formatMessage({
           id: 'assign role',
-          defaultMessage: 'assign role',
+          defaultMessage: 'Assign Role',
         })}
         trigger={
           <a 
           style={{display: props.values?.currentUserRoleId === 1 ? 'inline' : 'none'}}
           type="primary" icon={<PlusOutlined />}>
-            <FormattedMessage id="assignRole" defaultMessage="assignRole" />
+            <FormattedMessage id="assignRole" defaultMessage="Assign Role" />
           </a>
         }
         width="400px"

@@ -70,7 +70,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       }
         title={intl.formatMessage({
           id: 'add staff',
-          defaultMessage: 'add staff',
+          defaultMessage: 'Update Details',
         })}
         trigger={
           // <a style={{display: props?.values?.roleId === 1 ? 'inline' : 'none'}} type="primary" icon={<PlusOutlined />}>
@@ -78,7 +78,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           // </a>
           <a type="primary"
           style={{display: props.values?.currentUserRoleId === 1 ? 'inline' : 'none'}} icon={<PlusOutlined />}>
-          <FormattedMessage id="update" defaultMessage="update" />
+          <FormattedMessage id="update" defaultMessage="Update" />
         </a>
         }
         width="400px"
@@ -116,7 +116,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               message: (
                 <FormattedMessage
                   id="userName"
-                  defaultMessage="userName is required"
+                  defaultMessage="Name is required"
                 />
               ),
             },
@@ -125,7 +125,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           name="username"
           label={intl.formatMessage({
             id: 'userName',
-            defaultMessage: 'userName',
+            defaultMessage: 'Name',
           })}
         />
          <ProFormText
@@ -135,7 +135,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               message: (
                 <FormattedMessage
                   id="phone"
-                  defaultMessage="phone is required"
+                  defaultMessage="Phone Number is required"
                 />
               ),
             },
@@ -144,7 +144,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           name="phone"
           label={intl.formatMessage({
             id: 'phone',
-            defaultMessage: 'phone',
+            defaultMessage: 'Phone Number',
           })}
         />
            <ProForm.Item 
@@ -163,7 +163,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
            name="status"
            label={intl.formatMessage({
              id: 'role status',
-             defaultMessage: 'role status',
+             defaultMessage: 'Role Status',
            })}>
              
              <Switch
@@ -172,8 +172,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
                 }}
                 defaultValue={props?.values?.status === 1}
                 // checked={true}
-                checkedChildren="on"
-                unCheckedChildren="off"
+                checkedChildren="On"
+                unCheckedChildren="Off"
                 
               />
         
