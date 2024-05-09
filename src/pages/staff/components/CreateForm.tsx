@@ -64,11 +64,11 @@ const CreateForm: FC<CreateFormProps> = (props) => {
       <ModalForm
         title={intl.formatMessage({
           id: 'add staff',
-          defaultMessage: 'add staff',
+          defaultMessage: 'Add Staff',
         })}
         trigger={
           <Button type="primary" icon={<PlusOutlined />}>
-            <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+            <FormattedMessage id="pages.searchTable.new" defaultMessage=" New" />
           </Button>
         }
         width="400px"
@@ -104,7 +104,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               message: (
                 <FormattedMessage
                   id="userName"
-                  defaultMessage="userName is required"
+                  defaultMessage="Name is required"
                 />
               ),
             },
@@ -113,7 +113,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           name="username"
           label={intl.formatMessage({
             id: 'userName',
-            defaultMessage: 'userName',
+            defaultMessage: 'Name',
           })}
         />
          <ProFormText
@@ -123,7 +123,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
               message: (
                 <FormattedMessage
                   id="phone"
-                  defaultMessage="phone is required"
+                  defaultMessage="Phone number is required"
                 />
               ),
             },
@@ -132,7 +132,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           name="phone"
           label={intl.formatMessage({
             id: 'phone',
-            defaultMessage: 'phone',
+            defaultMessage: 'Phone Number',
           })}
         />
            <ProForm.Item 
@@ -151,7 +151,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
            name="status"
            label={intl.formatMessage({
              id: 'role status',
-             defaultMessage: 'role status',
+             defaultMessage: 'Role Status',
            })}>
              
              <Switch

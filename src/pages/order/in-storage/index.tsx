@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { removeRule, rule,getInStorageList,deleteOrerById } from '@/services/ant-design-pro/api';
+import { removeRule, rule,getInStorageList,deleteOrerById,getRoleById } from '@/services/ant-design-pro/api';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -34,6 +34,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
 import DistributeForm from '../components/DistributeForm'
+import { history, useModel } from '@umijs/max';
 
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -63,6 +64,9 @@ const TableList: React.FC = () => {
     },
   });
   const [form] = Form.useForm<{ name: string; company: string }>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const [currentUserRoleId, setCurrentUserRoleId] = useState<number>(0);
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: (
@@ -81,7 +85,7 @@ const TableList: React.FC = () => {
               setCurrentRow(entity);
               setShowDetail(true);
             }}>
-          <Avatar size="large" shape="square" style={{marginRight:10}} src={entity.sliderUrls} />
+          {/* <Avatar size="large" shape="square" style={{marginRight:10}} src={entity.sliderUrls} /> */}
           {dom}
         </a>
         );
@@ -96,16 +100,23 @@ const TableList: React.FC = () => {
       title: (
         <FormattedMessage
           id="pages.searchTable.serialId"
-          defaultMessage="Serial Number"
+          defaultMessage="SerialId"
         />
       ),
       dataIndex: 'serialId',
-      hideInForm: false,
-      renderText: (val: string) =>
-        `${val}${intl.formatMessage({
-          id: 'pages.searchTable.tenThousand',
-          defaultMessage: ' 万 ',
-        })}`,
+      sorter: true,
+      // hideInForm: true,
+      // renderText: (val: string) =>
+      //   `${val}${intl.formatMessage({
+      //     id: 'pages.searchTable.tenThousand',
+      //     defaultMessage: ' 万 ',
+      //   })}`,
+      // hideInForm: false,
+      // renderText: (val: string) =>
+      //   `${val}${intl.formatMessage({
+      //     id: 'pages.searchTable.tenThousand',
+      //     defaultMessage: ' 万 ',
+      //   })}`,
     },
     {
       title: <FormattedMessage id="returnType" defaultMessage="Return Type" />,
@@ -135,6 +146,34 @@ const TableList: React.FC = () => {
         }
       },
   },
+    // {
+    //     title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="auditStatus" />,
+    //     dataIndex: 'status',
+    //     hideInForm: true,
+    //     valueEnum: {
+    //       0: {
+    //         text: (
+    //           <FormattedMessage
+    //             id="pages.searchTable.auditStatus.default"
+    //             defaultMessage="Shut down"
+    //           />
+    //         ),
+    //         status: 'Default',
+    //       },
+    //       1: {
+    //         text: (
+    //           <FormattedMessage id="pages.searchTable.auditStatus.success" defaultMessage="success" />
+    //         ),
+    //         status: 'inStorage',
+    //       },
+    //       2: {
+    //         text: (
+    //           <FormattedMessage id="pages.searchTable.auditStatus.refuse" defaultMessage="refuse" />
+    //         ),
+    //         status: 'outStorage',
+    //       }
+    //     },
+    //   },
     {
         title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="Audit Status" />,
         dataIndex: 'status',
@@ -196,7 +235,15 @@ const TableList: React.FC = () => {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Options" />,
       dataIndex: 'option',
       valueType: 'option',
+      display:"none",
       render: (_, record) => [
+        // <a style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}>{{--}}</a>
+       
+        <a 
+        style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}
+         >
+          --
+        </a>,
         // update
         <UpdateForm
           trigger={
@@ -206,10 +253,14 @@ const TableList: React.FC = () => {
           }
           key="config"
           onOk={actionRef.current?.reload}
-          values={record}
+          values={{
+            ...record,
+            currentUserRoleId:currentUserRoleId
+          }}
         />,
         // delete
         <a key="subscribeAlert"  
+        style={{display: currentUserRoleId === 1 ? 'inline' : 'none'}}
           onClick={() => {
             console.log(record,"record---------")
             Modal.confirm({
@@ -230,23 +281,16 @@ const TableList: React.FC = () => {
         <DistributeForm 
           trigger={
             <a>
-              <FormattedMessage id="distribute" defaultMessage="Distribute" />
+              <FormattedMessage id="distribute" defaultMessage="Audit" />
             </a>
           }
           key="config"
           onOk={actionRef.current?.reload}
-          values={record}
+          values={{
+            ...record,
+            currentUserRoleId:currentUserRoleId
+          }}
         />,
-         <a key="distribute" onClick={()=>{
-       
-         }}>
-       </a>,
-        <a key="audit">
-            <FormattedMessage
-            id="audit"
-            defaultMessage="audit"
-        />
-      </a>,
       ],
     },
   ];
@@ -314,6 +358,9 @@ const TableList: React.FC = () => {
           filter,
         ) => {
           console.log('params-------------',params)
+          let res1 = await getRoleById(currentUser?.id)
+          console.log(res1,"res----getRoldId")
+          setCurrentUserRoleId(res1?.data)
           const msg = await getInStorageList(params);
           console.log('getInStorageList',msg);
           return {

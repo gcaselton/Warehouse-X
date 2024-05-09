@@ -76,7 +76,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           // <a style={{display: props?.values?.roleId === 1 ? 'inline' : 'none'}} type="primary" icon={<PlusOutlined />}>
           //   <FormattedMessage id="update" defaultMessage="update" />
           // </a>
-          <a type="primary" icon={<PlusOutlined />}>
+          <a type="primary"
+          style={{display: props.values?.currentUserRoleId === 1 ? 'inline' : 'none'}} icon={<PlusOutlined />}>
           <FormattedMessage id="update" defaultMessage="update" />
         </a>
         }
@@ -86,7 +87,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           console.log(value,'add staff')
           let formdata = {
             ...value,
-            name:"",
+            name:value?.username,
             status:value?.status ? 1 : 0,
             password:111111,
             description:"",

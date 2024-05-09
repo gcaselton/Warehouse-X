@@ -4,8 +4,8 @@ import { GoogleMap, HeatmapLayer, LoadScript } from '@react-google-maps/api';
 const HeatmapComponent = ({ heatmapData }) => {
     return (
         <LoadScript
-            
-            libraries={['visualization']}
+        googleMapsApiKey={"AIzaSyBGJNVOxy57Z8RPomSZOHczuRn3acF-0DU"}
+        libraries={['visualization']}
         >
             <GoogleMap
                 mapContainerStyle={{ height: '500px', width: '100%' }}

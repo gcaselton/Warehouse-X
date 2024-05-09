@@ -59,7 +59,7 @@ export default [
         component: './dashboard/analysis',
       },
       {
-        name: 'Map',
+        name: 'Heat Map',
         path: '/dashboard/map',
         component: './dashboard/map/index.tsx',
       }
@@ -246,18 +246,18 @@ export default [
     routes:[
       {
         path: '/returns',
-        redirect: '/returns/in-storage',
+        redirect: '/returns/inventory',
       },
       {
-        name: 'in-storage',
+        name: 'Inventory',
         // icon: 'smile',
-        path: '/returns/in-storage',
+        path: '/returns/inventory',
         component: './order/in-storage',
       },
     ]
   },
   {
-    name:"staff",
+    name:"Staff",
     path:"/staff",
     icon: 'smile',
     routes:[
@@ -266,7 +266,7 @@ export default [
         redirect: '/staff/list',
       },
       {
-        name: 'list',
+        name: 'List',
         // icon: 'smile',
         path: '/staff/list',
         component: './staff/list',

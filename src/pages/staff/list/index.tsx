@@ -1,4 +1,4 @@
-import { removeRule, rule,getStaffLit,deleteUserByID } from '@/services/ant-design-pro/api';
+import { removeRule, rule,getStaffLit,deleteUserByID,getRoleById } from '@/services/ant-design-pro/api';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -17,10 +17,12 @@ import { history, useModel } from '@umijs/max';
 const TableList: React.FC = () => {
   const { initialState } = useModel('@@initialState');
 const { currentUser } = initialState || {};
+
 console.log(currentUser,"currentUser--------")
   const actionRef = useRef<ActionType>();
 
   const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [currentUserRoleId, setCurrentUserRoleId] = useState<number>(0);
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
@@ -105,20 +107,26 @@ console.log(currentUser,"currentUser--------")
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
+        <a 
+        style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}
+         >
+          --
+        </a>,
         <UpdateForm
           trigger={
             <a
-              style={{display: record?.roleId === 1 ? 'inline' : 'none'}}>
+              style={{display: record?.currentUserRoleId === 1 ? 'inline' : 'none'}}>
               <FormattedMessage id="update" defaultMessage="update" />
             </a>
           }
           key="config"
           onOk={actionRef.current?.reload}
-          values={record}
+          values={{
+            ...record,
+            currentUserRoleId:currentUserRoleId
+          }}
         />,
         <AssignForm
-
-        
           trigger={
             <a >
               <FormattedMessage id="assignRole" defaultMessage="assignRole" />
@@ -126,11 +134,14 @@ console.log(currentUser,"currentUser--------")
           }
           key="config"
           onOk={actionRef.current?.reload}
-          values={record}
+          values={{
+            ...record,
+            currentUserRoleId:currentUserRoleId
+          }}
         />,
         <a 
           key="subscribeAlert"
-          // style={{display: record?.roleId === 1 ? 'inline' : 'none'}}
+          style={{display: currentUserRoleId === 1 ? 'inline' : 'none'}}
           onClick={() => {
             console.log(record,"record---------")
             Modal.confirm({
@@ -149,6 +160,11 @@ console.log(currentUser,"currentUser--------")
       ],
     },
   ];
+
+  const getRoldId = async(id:number) => {
+    let res = await getRoleById(currentUser?.id)
+    console.log(res,"res----getRoldId")
+  }
 
 
   const deleteItem = async (id: number) => {
@@ -213,6 +229,9 @@ console.log(currentUser,"currentUser--------")
           filter,
         ) => {
           console.log('params-------------',params)
+          let res1 = await getRoleById(currentUser?.id)
+          console.log(res1,"res----getRoldId")
+          setCurrentUserRoleId(res1?.data)
           const msg = await getStaffLit(params);
           console.log('getStaffLit',msg);
           return {
@@ -258,12 +277,12 @@ console.log(currentUser,"currentUser--------")
               defaultMessage="Batch deletion"
             />
           </Button>
-          <Button type="primary">
+          {/* <Button type="primary">
             <FormattedMessage
               id="pages.searchTable.batchApproval"
               defaultMessage="Batch approval"
             />
-          </Button>
+          </Button> */}
         </FooterToolbar>
       )}
 

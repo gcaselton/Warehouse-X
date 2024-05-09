@@ -26,6 +26,189 @@ const DistributeForm: FC<DistributeFormProps> = (props) => {
     token:localStorage.getItem('TOKEN_STRING')
   }
 
+  const locationOptions: Option[] = [
+    {
+      value: 'Refunds',
+      label: 'Refunds',
+      children: [
+        {
+          value: 'Section A',
+          label: 'Section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'Section B',
+          label: 'Section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+        {
+          value: 'Section C',
+          label: 'Section C',
+          children: [
+            {
+              value: 'C10',
+              label: 'C10',
+            },
+            {
+              value: 'C20',
+              label: 'C20',
+            },
+            {
+              value: 'C30',
+              label: 'C30',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'Repairs',
+      label: 'Repairs',
+      children: [
+        {
+          value: 'Section A',
+          label: 'Section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'Section B',
+          label: 'Section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+        {
+          value: 'Section C',
+          label: 'Section C',
+          children: [
+            {
+              value: 'C10',
+              label: 'C10',
+            },
+            {
+              value: 'C20',
+              label: 'C20',
+            },
+            {
+              value: 'C30',
+              label: 'C30',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'Recycling',
+      label: 'Recycling',
+      children: [
+        {
+          value: 'Section A',
+          label: 'Section A',
+          children: [
+            {
+              value: 'A10',
+              label: 'A10',
+            },
+            {
+              value: 'A20',
+              label: 'A20',
+            },
+            {
+              value: 'A30',
+              label: 'A30',
+            },
+          ],
+        },
+        {
+          value: 'Section B',
+          label: 'Section B',
+          children: [
+            {
+              value: 'B10',
+              label: 'B10',
+            },
+            {
+              value: 'B20',
+              label: 'B20',
+            },
+            {
+              value: 'B30',
+              label: 'B30',
+            },
+          ],
+        },
+        {
+          value: 'Section C',
+          label: 'Section C',
+          children: [
+            {
+              value: 'C10',
+              label: 'C10',
+            },
+            {
+              value: 'C20',
+              label: 'C20',
+            },
+            {
+              value: 'C30',
+              label: 'C30',
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
   const { reload } = props;
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -47,6 +230,10 @@ const DistributeForm: FC<DistributeFormProps> = (props) => {
     },
   });
 
+  const onChange = (value: (string | number)[]) => {
+    console.log(value);
+  };
+
   return (
     <>
       {contextHolder}
@@ -67,28 +254,39 @@ const DistributeForm: FC<DistributeFormProps> = (props) => {
         modalProps={{ okButtonProps: { loading } }}
         onFinish={async (value) => {
           console.log("form value",value,value.storeLocation)
-          await run(props?.values?.id);
+          let res = await outStorageById(props?.values?.id);
+          if(res.code === 200){
+            messageApi.success('outStorage successfully');  
+            setTimeout(() =>{
+              window.location.reload()
+            },2000)
+          } else {
+            messageApi.error('outStorage failed, please try again!');
+          }
           return true;
         }}
       >
-     
+
+      
+        <ProFormSelect
+            name="auditResult"
+            label="Audit Status"
+            valueEnum={{
+              authorised: 'Authorised',
+              denied: 'Denied',
+            }}
+            placeholder="In Process"
+            rules={[{ required: false, message: 'In Process' }]}
+          />
+
         <ProForm.Item 
            width="md"
-           name="categoryId"
+           name="storeLocation"
            label={intl.formatMessage({
              id: 'address',
              defaultMessage: 'Warehouse Location',
            })}>
-            <Select
-                defaultValue={2}
-                style={{ width: 328 }}
-                disabled
-                options={[
-                    { value: 1, label: 'Dyson return center' },
-                    { value: 2, label: 'Dyson repair center' },
-                    { value: 3, label: 'Dyson recycle center' },
-                ]}
-            />
+            <Cascader options={locationOptions} onChange={onChange} placeholder="Please select" />
         </ProForm.Item>
          
         <ProFormTextArea 

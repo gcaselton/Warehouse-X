@@ -294,12 +294,19 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             sliderUrls:value?.image?.file?.response?.data || "",
             categoryId:Number(value?.categoryId),
             serialId:Number(value?.serialId),
-            storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
+            // storeLocation:`${value?.storeLocation[0]}-${value?.storeLocation[1]}-${value?.storeLocation[2]}`,
             status:1,
             postcode:value?.postcode
           }
-          await run(formData);
-
+          let res = await addProduct(formData);
+          if(res?.code === 200){
+            messageApi.success('Added successfully');
+            setTimeout(() =>{
+              window.location.reload()
+            },2000)
+          }  else {
+            messageApi.error('Added failed, please try again!');
+          }
           return true;
         }}
       >
@@ -409,15 +416,6 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           src={previewImage}
         />
       )}
-      <ProForm.Item 
-           width="md"
-           name="storeLocation"
-           label={intl.formatMessage({
-             id: 'storeLocation',
-             defaultMessage: 'Warehouse Location',
-           })}>
-            <Cascader options={options} onChange={onChange} placeholder="Please select" />
-        </ProForm.Item>
         
         <ProFormText
           rules={[
@@ -435,7 +433,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           name="postcode"
           label={intl.formatMessage({
             id: 'pages.newOrder.postcode',
-            defaultMessage: 'Customer postcode',
+            defaultMessage: 'Postcode',
           })}
         />
      

@@ -64,7 +64,7 @@ export default {
   'pages.searchTable.config': 'Configuration',
   'pages.searchTable.subscribeAlert': 'Subscribe to alerts',
   'pages.searchTable.title': 'List of Returns',
-  'pages.searchTable.new': 'New',
+  'pages.searchTable.new': ' New',
   'pages.searchTable.update': 'Update',
   'pages.searchTable.chosen': 'Chosen',
   'pages.searchTable.item': 'Item',

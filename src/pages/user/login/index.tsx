@@ -39,7 +39,6 @@ const iconStyles: CSSProperties = {
 };
 
 const playLoginSound = () => {
-  console.log('Playing login sound');
   const audio = new Audio('/loginSound.wav');
   audio.play();
 };
@@ -83,10 +82,13 @@ const Page = () => {
         // token
         localStorage.setItem('TOKEN_STRING',data?.token || '');
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        window.location.href = urlParams.get('redirect') || '/';
         playLoginSound();
+        await fetchUserInfo();
+        setTimeout(() => {
+          const urlParams = new URL(window.location.href).searchParams;
+          window.location.href = urlParams.get('redirect') || '/';
+        },1800)
+    
         return;
       } else {
         messageApi.error('Login failed, please try again!');
@@ -159,7 +161,7 @@ const Page = () => {
               rules={[
                 {
                   required: true,
-                  message: 'UserName is required!',
+                  message: 'Username is required!',
                 },
               ]}
             />

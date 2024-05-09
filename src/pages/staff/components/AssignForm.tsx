@@ -66,7 +66,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
 
   const submitAssignRole = async () => {
     let formdata = {
-        roleIdList:roleList,
+        roleId:roleList[0],
         userId:props?.values?.id
       }
       let res = await assignRole({ ...formdata });
@@ -75,7 +75,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         messageApi.success('Assign role successfully');
         reload?.();
         setTimeout(() =>{
-            // window.location.reload()
+            window.location.reload()
           },2000)
       } else {
         messageApi.error('Assign role failed, please try again!');
@@ -97,7 +97,9 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           defaultMessage: 'assign role',
         })}
         trigger={
-          <a type="primary" icon={<PlusOutlined />}>
+          <a 
+          style={{display: props.values?.currentUserRoleId === 1 ? 'inline' : 'none'}}
+          type="primary" icon={<PlusOutlined />}>
             <FormattedMessage id="assignRole" defaultMessage="assignRole" />
           </a>
         }

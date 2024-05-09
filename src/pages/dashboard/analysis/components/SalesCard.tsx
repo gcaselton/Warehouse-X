@@ -49,7 +49,7 @@ const SalesCard = ({
     {x:'Aug', y :324},
     {x:'Sep', y :876},
     {x:'Oct', y :345},
-    {x:'Nev', y :999},
+    {x:'Nov', y :999},
     {x:'Dec', y :567},
   ]
   const salesData2 = [
@@ -63,7 +63,7 @@ const SalesCard = ({
     {x:'Aug', y :956},
     {x:'Sep', y :246},
     {x:'Oct', y :765},
-    {x:'Nev', y :356},
+    {x:'Nov', y :356},
     {x:'Dec', y :765},
   ]
   const salesData3 = [
@@ -77,7 +77,7 @@ const SalesCard = ({
     {x:'Aug', y :890},
     {x:'Sep', y :555},
     {x:'Oct', y :874},
-    {x:'Nev', y :467},
+    {x:'Nov', y :467},
     {x:'Dec', y :678},
   ]
   return (
@@ -122,7 +122,7 @@ const SalesCard = ({
           items={[
             {
               key: 'sales',
-              label: 'return',
+              label: 'Refund',
               children: (
                 <Row>
                   <Col xl={24} lg={12} md={12} sm={24} xs={24}>
@@ -147,7 +147,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '',
+                          name: 'Refunds',
                           channel: 'y',
                         }}
                       />
@@ -180,7 +180,7 @@ const SalesCard = ({
             },
             {
               key: 'repair',
-              label: 'repair',
+              label: 'Repair',
               children: (
                 <Row>
                   <Col xl={24} lg={12} md={12} sm={24} xs={24}>
@@ -205,7 +205,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '',
+                          name: 'Repairs',
                           channel: 'y',
                         }}
                       />
@@ -238,7 +238,7 @@ const SalesCard = ({
             },
             {
               key: 'recycle',
-              label: 'recycle',
+              label: 'Recycle',
               children: (
                 <Row>
                   <Col xl={24} lg={12} md={12} sm={24} xs={24}>
@@ -261,7 +261,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '',
+                          name: 'Recycles',
                           channel: 'y',
                         }}
                       />
