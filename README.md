@@ -51,5 +51,3 @@ npm test
 ## More
 
 For more information or help using Warehouse X, please contact c3062942@newcastle.ac.uk
-
-# WarehouseX-web
