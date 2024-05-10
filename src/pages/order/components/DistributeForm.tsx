@@ -1,31 +1,19 @@
-import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Image, Upload,Cascader,Select } from 'antd';
-import type { GetProp, UploadFile, UploadProps } from 'antd';
-import { message, Modal,Button } from 'antd';
-import { outStorageById } from '@/services/ant-design-pro/api';
-import { ActionType, ModalForm, ProFormText, ProFormTextArea,  ProFormRadio,ProForm,ProFormSelect } from '@ant-design/pro-components';
+/**
+ * This component is the form used to audit and distribute returns.
+ */
+import { Cascader } from 'antd';
+import { message } from 'antd'; 
+import { outStorageById } from '@/services/ant-design-pro/api'; 
+import { ActionType, ModalForm, ProFormTextArea, ProForm, ProFormSelect } from '@ant-design/pro-components'; 
+import { FormattedMessage, useIntl, useRequest } from '@umijs/max'; 
+import { FC } from 'react'; 
 
-import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
-import { FC } from 'react';
-import options from './CreateForm'
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 interface DistributeFormProps {
-  reload?: ActionType['reload'];
+  reload?: ActionType['reload']; // Define props interface with optional reload function
 }
 
 const DistributeForm: FC<DistributeFormProps> = (props) => {
-  console.log("distribute form",props)
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([
-   
-  
-  ]);
-  const headers = {
-    token:localStorage.getItem('TOKEN_STRING')
-  }
-
+  // Warehouse location options for Cascader component
   const locationOptions: Option[] = [
     {
       value: 'Refunds',
@@ -208,95 +196,107 @@ const DistributeForm: FC<DistributeFormProps> = (props) => {
       ],
     },
   ];
+  
 
   const { reload } = props;
 
-  const [messageApi, contextHolder] = message.useMessage();
-  const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 14 } };
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
+  const [messageApi, contextHolder] = message.useMessage(); 
+
+  const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 14 } }; 
+
   const intl = useIntl();
 
-  const { run, loading } = useRequest(outStorageById, {
-    manual: true,
+  const { loading } = useRequest(outStorageById, {
+    manual: true, 
     onSuccess: () => {
+      // Display success message and reload if reload function is provided
       messageApi.success('Item successfully marked for pickup!');
       reload?.();
     },
     onError: () => {
+      // Display error message if distribution fails
       messageApi.error('Distribution failed, please try again');
     },
   });
 
+  // Handle onChange event for Cascader selection
   const onChange = (value: (string | number)[]) => {
-    console.log(value);
+    console.log(value); // Log selected value
   };
 
+  // Render DistributeForm component
   return (
     <>
       {contextHolder}
+      {/* Form for Audit & distribution */}
       <ModalForm
-        initialValues={props.values}
+        initialValues={props.values} 
         title={intl.formatMessage({
           id: 'Distribute',
           defaultMessage: 'Distribute',
-        })}
+        })} 
         trigger={
           <a type="primary">
             <FormattedMessage id="Distribute" defaultMessage="Distribute" />
           </a>
-        }
-        layout="horizontal"
-        {...formItemLayout}
-        width="800px"
-        modalProps={{ okButtonProps: { loading } }}
+        } 
+        layout="horizontal" 
+        {...formItemLayout} 
+        width="800px" 
+        modalProps={{ okButtonProps: { loading } }} 
         onFinish={async (value) => {
-          console.log("form value",value,value.storeLocation)
+          console.log("form value", value, value.storeLocation); 
+          // Make API request for outStorageById
           let res = await outStorageById(props?.values?.id);
-          if(res.code === 200){
-            messageApi.success('outStorage successfully');  
-            setTimeout(() =>{
-              window.location.reload()
-            },2000)
+          // Check response code
+          if (res.code === 200) {
+            // Display success message and reload after 2 seconds
+            messageApi.success('outStorage successfully');
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
           } else {
+            // Display error message if outStorage fails
             messageApi.error('outStorage failed, please try again!');
           }
-          return true;
+          return true; // Return true after finishing
         }}
       >
-
-      
+        
         <ProFormSelect
-            name="auditResult"
-            label="Audit Status"
-            valueEnum={{
-              authorised: 'Authorised',
-              denied: 'Denied',
-            }}
-            placeholder="In Process"
-            rules={[{ required: false, message: 'In Process' }]}
-          />
+          name="auditResult"
+          label="Audit Status"
+          valueEnum={{
+            authorised: 'Authorised',
+            denied: 'Denied',
+          }}
+          placeholder="In Process"
+          rules={[{ required: false, message: 'In Process' }]}
+        />
 
-        <ProForm.Item 
-           width="md"
-           name="storeLocation"
-           label={intl.formatMessage({
-             id: 'address',
-             defaultMessage: 'Warehouse Location',
-           })}>
-            <Cascader options={locationOptions} onChange={onChange} placeholder="Please select" />
+        
+        <ProForm.Item
+          width="md"
+          name="storeLocation"
+          label={intl.formatMessage({
+            id: 'address',
+            defaultMessage: 'Warehouse Location',
+          })}
+        >
+          {/* Cascader component for selecting store location */}
+          <Cascader options={locationOptions} onChange={onChange} placeholder="Please select" />
         </ProForm.Item>
-         
-        <ProFormTextArea 
-          width="md" 
+
+        {/* ProFormTextArea for order notes with default message signalling ready for pickup*/}
+        <ProFormTextArea
+          width="md"
           name="desc"
           initialValue={'Ready for pickup!'}
           label={intl.formatMessage({
             id: 'pages.newOrder.notes',
             defaultMessage: 'Notes',
-          })} />
+          })}
+        />
       </ModalForm>
     </>
   );

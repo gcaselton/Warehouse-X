@@ -1,63 +1,46 @@
-// @ts-ignore
-/* eslint-disable */
+// This class contains functions to interact with the backend API for user management and product management.
 import { request } from '@umijs/max';
 const TOKEN = localStorage.getItem('TOKEN_STRING');
-const REQUEST_HEADER = {
-  'Authorization':TOKEN,
-}
-/** 获取当前的用户 GET /api/currentUser */
-// export async function currentUser(options?: { [key: string]: any }) {
-//   return request<{
-//     data: API.CurrentUser;
-//   }>('/api/currentUser', {
-//     method: 'GET',
-//     ...(options || {}),
-//   });
-// }
-// get user information
+
+// Function to get current user information
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
     data: API.CurrentUser;
   }>('/admin/system/index/getUserInfo', {
     method: 'GET',
     headers: {
-      token:TOKEN
-      // 'Authorization':TOKEN,
-      // 'Content-Type': 'application/x-www-form-urlencoded'
+      token: TOKEN
     },
-    // ...(options || {}),
   });
 }
 
-export async function getRoleById(params,options?: { [key: string]: any }) {
+// Function to get role by ID
+export async function getRoleById(params: any, options?: { [key: string]: any }) {
   return request<{
     data: API.CurrentUser;
   }>(`/admin/system/sysUser/getRoleById/${params}`, {
     method: 'GET',
     headers: {
-      token:TOKEN
-      // 'Authorization':TOKEN,
-      // 'Content-Type': 'application/x-www-form-urlencoded'
+      token: TOKEN
     },
-    // ...(options || {}),
   });
 }
 
-// get user staff
-export async function getStaffLit(params,options?: { [key: string]: any }) {
+// Function to get user staff
+export async function getStaffLit(params: any, options?: { [key: string]: any }) {
   return request(`/admin/system/sysUser/findByPage/${1}/${10}`, {
     method: 'GET',
     headers: {
-      token:TOKEN
+      token: TOKEN
     },
     params: {
-      username:params?.username
+      username: params?.username
     },
     ...(options || {}),
   });
 }
 
-// updateSysUser
+// Function to update user information
 export async function updateUserInfo(options?: { [key: string]: any }) {
   return request<{
     data: API.userInfo;
@@ -67,68 +50,56 @@ export async function updateUserInfo(options?: { [key: string]: any }) {
   });
 }
 
-// saveSysUser
-// export async function updateProduct(body, options?: { [key: string]: any }) {
-//   return request<API.LoginResult>('/admin/product/product/updateById', {
-//     method: 'POST',
-//     headers: {
-//       token:TOKEN,
-//     },
-//     data: body,
-//     ...(options || {}),
-//   });
-export async function addStaff(body,options?: { [key: string]: any }) {
+// Function to add staff
+export async function addStaff(body: any, options?: { [key: string]: any }) {
   return request('/admin/system/sysUser/saveSysUser', {
     method: 'POST',
     headers: {
-      token:TOKEN,
+      token: TOKEN,
     },
     data: body,
     ...(options || {}),
   });
 }
 
-export async function updateStaff(body,options?: { [key: string]: any }) {
+// Function to update staff
+export async function updateStaff(body: any, options?: { [key: string]: any }) {
   return request('/admin/system/sysUser/updateSysUser', {
     method: 'PUT',
     headers: {
-      token:TOKEN,
+      token: TOKEN,
     },
     data: body,
     ...(options || {}),
   });
 }
 
-// assign role
-export async function assignRole(body,options?: { [key: string]: any }) {
-  // const formData = New 
+// Function to assign role
+export async function assignRole(body: any, options?: { [key: string]: any }) {
   let res = request<API.LoginResult>(`/admin/system/sysUser/doAssign`, {
     method: 'POST',
     headers: {
-      token:TOKEN,
+      token: TOKEN,
     },
     params: body,
     ...(options || {}),
   });
-  console.log(res,'doAssign res')
+  console.log(res, 'doAssign res')
   return res;
 }
 
-// delete user ById
-export async function deleteUserByID( params: {
-  // query
-  id?: number;
-},options?: { [userId: any]: any }) {
- 
+// Function to delete user by ID
+export async function deleteUserByID(params: any, options?: { [userId: any]: any }) {
   return request(`/admin/system/sysUser/deleteById/${params}`, {
     method: 'DELETE',
     headers: {
-      token:TOKEN
+      token: TOKEN
     },
     ...(options || {}),
   });
 }
-// update user Role
+
+// Function to update user role
 export async function updateUserRole(options?: { [userId: any]: any }) {
   return request<{
     data: API.userInfo;
@@ -137,56 +108,56 @@ export async function updateUserRole(options?: { [userId: any]: any }) {
     ...(options || {}),
   });
 }
-/** 退出登录接口 POST /api/login/outLogin */
+
+// Function to logout
 export async function outLogin(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/admin/system/index/logout', {
     method: 'GET',
     headers: {
-      token:TOKEN
+      token: TOKEN
     },
     ...(options || {}),
   });
 }
 
-// add product
-export async function addProduct(body, options?: { [key: string]: any }) {
+// Function to add product
+export async function addProduct(body: any, options?: { [key: string]: any }) {
   return request<API.LoginResult>('/admin/product/product/save', {
     method: 'POST',
     headers: {
-      token:TOKEN,
+      token: TOKEN,
     },
     data: body,
     ...(options || {}),
   });
 }
 
-// update product
-export async function updateProduct(body, options?: { [key: string]: any }) {
-  let res =  request<API.LoginResult>('/admin/product/product/updateById', {
+// Function to update product
+export async function updateProduct(body: any, options?: { [key: string]: any }) {
+  let res = request<API.LoginResult>('/admin/product/product/updateById', {
     method: 'POST',
     headers: {
-      token:TOKEN,
+      token: TOKEN,
     },
     data: body,
     ...(options || {}),
   });
-  console.log(res,'updateProduct res')
+  console.log(res, 'updateProduct res')
   return res
 }
 
-
-// get product list
+// Function to get product list
 export async function getProductList(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/admin/product/product', {
     method: 'GET',
     headers: {
-      token:TOKEN
+      token: TOKEN
     },
     ...(options || {}),
   });
 }
 
-/** 登录接口 POST /api/login/account */
+// Function to login
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
   return request<API.LoginResult>('/api/login/account', {
     method: 'POST',
@@ -198,7 +169,7 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
   });
 }
 
-/** 此处后端没有提供注释 GET /api/notices */
+// Function to get notices
 export async function getNotices(options?: { [key: string]: any }) {
   return request<API.NoticeIconList>('/api/notices', {
     method: 'GET',
@@ -206,17 +177,8 @@ export async function getNotices(options?: { [key: string]: any }) {
   });
 }
 
-/** 获取规则列表 GET /api/rule */
-export async function rule(
-  params: {
-    // query
-    /** 当前的页码 */
-    current?: number;
-    /** 页面的容量 */
-    limit?: number;
-  },
-  options?: { [key: string]: any },
-) {
+// Function to get rule list
+export async function rule(params: any, options?: { [key: string]: any }) {
   return request<API.RuleList>('/api/rule', {
     method: 'GET',
     params: {
@@ -226,7 +188,7 @@ export async function rule(
   });
 }
 
-/** 更新规则 PUT /api/rule */
+// Function to update rule
 export async function updateRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
@@ -237,7 +199,7 @@ export async function updateRule(options?: { [key: string]: any }) {
   });
 }
 
-/** 新建规则 POST /api/rule */
+// Function to add rule
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
@@ -248,7 +210,7 @@ export async function addRule(options?: { [key: string]: any }) {
   });
 }
 
-/** 删除规则 DELETE /api/rule */
+// Function to remove rule
 export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
     method: 'POST',
@@ -259,82 +221,49 @@ export async function removeRule(options?: { [key: string]: any }) {
   });
 }
 
-/** delete order GET /admin/product/product/deleteById */
-export async function deleteOrerById(
-  params: {
-    // query
-    id?: number;
-  },
-  options?: { [key: string]: any },
-){
-  console.log("deleteOrerById--params",params)
+// Function to delete order
+export async function deleteOrerById(params: any, options?: { [key: string]: any }) {
+  console.log("deleteOrerById--params", params)
   return request(`/admin/product/product/deleteById/${params}  `, {
-  
+
     method: 'DELETE',
     params: {
     },
     headers: {
-      token:TOKEN
+      token: TOKEN
     },
     ...(options || {}),
   });
 }
 
-/** 获取入库列表 GET /admin/product/product */
-export async function getInStorageList(
-  params: {
-    // query
-    /** 当前的页码 */
-    current?: number;
-    /** 页面的容量 */
-    pageSize?: number;
-    name?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  console.log("getInStorageList--params",params)
+// Function to get in storage list
+export async function getInStorageList(params: any, options?: { [key: string]: any }) {
+  console.log("getInStorageList--params", params)
   let formData = new FormData();
   formData.append("name", params.name);
   return request(`/admin/product/product/${params.current}/${params.pageSize}`, {
-  
+
     method: 'GET',
-    // body:formData,
-    // params:{
-    //   productDto:formData
-    // },
     params: {
-      name:params?.name,
-      categoryld:params?.categoryld || '',
-      orderId:params?.orderId,
-      serialId:params?.serialId,
-      // productDto:{
-      //   name:params?.name,
-      //   categoryld:params?.categoryld || ''
-      // }
+      name: params?.name,
+      categoryld: params?.categoryld || '',
+      orderId: params?.orderId,
+      serialId: params?.serialId,
     },
     headers: {
-      token:TOKEN,
-      // 'Content-Type': 'multipart/form-data'
-      // 'Content-Type': 'form-data'
-      // 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'
+      token: TOKEN,
     },
     ...(options || {}),
   });
 }
 
-/** out storage */
-export async function outStorageById(
-  params: {
-    id?: number;
-  },
-  options?: { [key: string]: any },
-) {
-  console.log("outStorageById--params",params)
+// Function to out storage
+export async function outStorageById(params: any, options?: { [key: string]: any }) {
+  console.log("outStorageById--params", params)
   return request(`/admin/product/product/updateStatus/${params}/${-1}`, {
     method: 'GET',
-    // params,
     headers: {
-      token:TOKEN,
+      token: TOKEN,
     },
     ...(options || {}),
   });

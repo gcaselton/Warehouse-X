@@ -1,14 +1,15 @@
-import { AvatarDropdown, AvatarName, Footer, Question, SelectLang } from '@/components';
-import { LinkOutlined } from '@ant-design/icons';
+import { AvatarDropdown, AvatarName, Footer } from '@/components';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
+import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+
+// Check if the environment is development
 const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/user/login';
+const loginPath = '/user/login'; // Path for the login page
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -19,6 +20,7 @@ export async function getInitialState(): Promise<{
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
+  // Function to fetch user information
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser({
@@ -26,11 +28,12 @@ export async function getInitialState(): Promise<{
       });
       return msg.data;
     } catch (error) {
-      history.push(loginPath);
+      history.push(loginPath); // Redirect to login page if fetching user info fails
     }
     return undefined;
   };
-  // 如果不是登录页面，执行
+
+  // If not on the login page, fetch user info and set initial state
   const { location } = history;
   if (![loginPath, '/user/register', '/user/register-result'].includes(location.pathname)) {
     const currentUser = await fetchUserInfo();
@@ -46,29 +49,26 @@ export async function getInitialState(): Promise<{
   };
 }
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    actionsRender: () => [],
+    actionsRender: () => [], // Render actions
     avatarProps: {
       src: initialState?.currentUser?.avatar,
-      title: <AvatarName />,
+      title: <AvatarName />, // Avatar title
       render: (_, avatarChildren) => {
-        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>; // Avatar dropdown
       },
     },
-    // waterMarkProps: {
-    //   content: initialState?.currentUser?.name,
-    // },
-    footerRender: () => <Footer />,
+    footerRender: () => <Footer />, // Render footer
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
+      // Redirect to login if not logged in
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }
     },
     bgLayoutImgList: [
+      // Background layout images
       {
         src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/D2LWSqNny4sAAAAAAAAAAAAAFl94AQBr',
         left: 85,
@@ -88,24 +88,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         width: '331px',
       },
     ],
-    links: isDev
-      ? [
-          // <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-          //   <LinkOutlined />
-          //   <span>OpenAPI 文档</span>
-          // </Link>,
-        ]
-      : [],
-    menuHeaderRender: undefined,
-    // 自定义 403 页面
-    // unAccessible: <div>unAccessible</div>,
-    // 增加一个 loading 的状态
+    menuHeaderRender: undefined, // Menu header render
     childrenRender: (children) => {
-      // if (initialState?.loading) return <PageLoading />;
       return (
         <>
           {children}
           {isDev && (
+            // Setting drawer for development environment
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -126,11 +115,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 };
 
 /**
- * @name request 配置，可以配置错误处理
- * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
- * @doc https://umijs.org/docs/max/request#配置
+ * @name request configuration, can configure error handling
+ * It provides a unified network request and error handling solution based on axios and ahooks' useRequest.
+ * @doc https://umijs.org/docs/max/request#configuration
  */
 export const request: RequestConfig = {
-  baseURL: 'http://117.72.14.250:8501',
-  ...errorConfig,
+  baseURL: 'http://117.72.14.250:8501', // Base URL for requests
+  ...errorConfig, // Error handling configuration
 };

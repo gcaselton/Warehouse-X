@@ -1,3 +1,4 @@
+// Trend component for the statistics page
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import React from 'react';

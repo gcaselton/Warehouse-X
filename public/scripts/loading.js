@@ -1,6 +1,6 @@
 /**
- * loading 占位
- * 解决首次加载时白屏的问题
+ * @name Loading Placeholder
+ * @description Solves the issue of a blank screen during initial loading
  */
  (function () {
   const _root = document.querySelector('#root');

@@ -3,10 +3,20 @@ import dayjs from 'dayjs';
 
 type RangePickerValue = RangePickerProps<dayjs.Dayjs>['value'];
 
+/**
+ * Add leading zero to single-digit numbers.
+ * @param val Number to format
+ * @returns Formatted number with leading zero if necessary
+ */
 export function fixedZero(val: number) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
+/**
+ * Get time distance based on the specified type.
+ * @param type Type of time distance: 'today', 'week', 'month', or 'year'
+ * @returns RangePickerValue representing the time distance
+ */
 export function getTimeDistance(type: 'today' | 'week' | 'month' | 'year'): RangePickerValue {
   const now = new Date();
   const oneDay = 1000 * 60 * 60 * 24;
@@ -34,6 +44,7 @@ export function getTimeDistance(type: 'today' | 'week' | 'month' | 'year'): Rang
 
     return [dayjs(beginTime), dayjs(beginTime + (7 * oneDay - 1000))];
   }
+
   const year = now.getFullYear();
 
   if (type === 'month') {

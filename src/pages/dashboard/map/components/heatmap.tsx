@@ -1,10 +1,12 @@
 import React from 'react';
 import { GoogleMap, HeatmapLayer, LoadScript } from '@react-google-maps/api';
 
+
+// Heatmap component initialised to center on the UK
 const HeatmapComponent = ({ heatmapData }) => {
     return (
         <LoadScript
-        googleMapsApiKey={"***********"}
+        // googleMapsApiKey={"****redacted****"}
         libraries={['visualization']}
         >
             <GoogleMap

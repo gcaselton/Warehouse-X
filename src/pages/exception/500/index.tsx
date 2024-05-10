@@ -1,6 +1,7 @@
 import { Link } from '@umijs/max';
 import { Button, Result } from 'antd';
 
+// 500 error page
 export default () => (
   <Result
     status="500"

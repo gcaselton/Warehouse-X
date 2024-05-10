@@ -1,33 +1,20 @@
 import { Column } from '@ant-design/plots';
 import { Card, Col, DatePicker, Row, Tabs } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker/generatePicker';
 import type dayjs from 'dayjs';
-import numeral from 'numeral';
 import type { DataItem } from '../data.d';
 import useStyles from '../style.style';
 
 export type TimeType = 'today' | 'week' | 'month' | 'year';
 const { RangePicker } = DatePicker;
 
-const rankingListData: {
-  title: string;
-  total: number;
-}[] = [];
-
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
-  });
-}
-
+/**
+ * SalesCard component displays sales data using Tabs and Column charts for different categories.
+ */
 const SalesCard = ({
   rangePickerValue,
   salesData,
-  isActive,
   handleRangePickerChange,
-  loading,
-  selectDate,
+  loading
 }: {
   rangePickerValue: RangePickerProps<dayjs.Dayjs>['value'];
   isActive: (key: TimeType) => string;
@@ -38,6 +25,8 @@ const SalesCard = ({
 }) => {
   const { styles } = useStyles();
   console.log({salesData})
+
+  // Sample data for Refunds
   const salesData1 = [
     {x:'Jan', y :123},
     {x:'Feb', y :345},
@@ -52,6 +41,8 @@ const SalesCard = ({
     {x:'Nov', y :999},
     {x:'Dec', y :567},
   ]
+
+  // Sample data for Repairs
   const salesData2 = [
     {x:'Jan', y :675},
     {x:'Feb', y :357},
@@ -66,6 +57,8 @@ const SalesCard = ({
     {x:'Nov', y :356},
     {x:'Dec', y :765},
   ]
+
+  // Sample data for Recycles
   const salesData3 = [
     {x:'Jan', y :674},
     {x:'Feb', y :234},
@@ -80,6 +73,7 @@ const SalesCard = ({
     {x:'Nov', y :467},
     {x:'Dec', y :678},
   ]
+
   return (
     <Card
       loading={loading}
@@ -92,20 +86,6 @@ const SalesCard = ({
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
-              {/* <div className={styles.salesExtra}>
-                <a className={isActive('today')} onClick={() => selectDate('today')}>
-                  今日
-                </a>
-                <a className={isActive('week')} onClick={() => selectDate('week')}>
-                  本周
-                </a>
-                <a className={isActive('month')} onClick={() => selectDate('month')}>
-                  本月
-                </a>
-                <a className={isActive('year')} onClick={() => selectDate('year')}>
-                  本年
-                </a>
-              </div> */}
               <RangePicker
                 value={rangePickerValue}
                 onChange={handleRangePickerChange}
@@ -127,6 +107,7 @@ const SalesCard = ({
                 <Row>
                   <Col xl={24} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                      {/* Column chart for Refund */}
                       <Column
                         height={300}
                         data={salesData1}
@@ -153,28 +134,6 @@ const SalesCard = ({
                       />
                     </div>
                   </Col>
-                  {/* <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span
-                              className={`${styles.rankingItemNumber} ${
-                                i < 3 ? styles.rankingItemNumberActive : ''
-                              }`}
-                            >
-                              {i + 1}
-                            </span>
-                            <span className={styles.rankingItemTitle} title={item.title}>
-                              {item.title}
-                            </span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col> */}
                 </Row>
               ),
             },
@@ -185,6 +144,7 @@ const SalesCard = ({
                 <Row>
                   <Col xl={24} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                      {/* Column chart for Repair */}
                       <Column
                         height={300}
                         data={salesData2}
@@ -211,28 +171,6 @@ const SalesCard = ({
                       />
                     </div>
                   </Col>
-                  {/* <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span
-                              className={`${styles.rankingItemNumber} ${
-                                i < 3 ? styles.rankingItemNumberActive : ''
-                              }`}
-                            >
-                              {i + 1}
-                            </span>
-                            <span className={styles.rankingItemTitle} title={item.title}>
-                              {item.title}
-                            </span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col> */}
                 </Row>
               ),
             },
@@ -243,6 +181,7 @@ const SalesCard = ({
                 <Row>
                   <Col xl={24} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                      {/* Column chart for Recycle */}
                       <Column
                         height={300}
                         data={salesData3}
@@ -267,28 +206,6 @@ const SalesCard = ({
                       />
                     </div>
                   </Col>
-                  {/* <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店访问量排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span
-                              className={`${
-                                i < 3 ? styles.rankingItemNumberActive : styles.rankingItemNumber
-                              }`}
-                            >
-                              {i + 1}
-                            </span>
-                            <span className={styles.rankingItemTitle} title={item.title}>
-                              {item.title}
-                            </span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col> */}
                 </Row>
               ),
             },

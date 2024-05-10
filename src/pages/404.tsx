@@ -1,3 +1,6 @@
+/**
+ * 404 Error Page
+ */
 import { history, useIntl } from '@umijs/max';
 import { Button, Result } from 'antd';
 import React from 'react';

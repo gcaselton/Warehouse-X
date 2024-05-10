@@ -1,27 +1,25 @@
 import { addStaff } from '@/services/ant-design-pro/api';
-import { PlusOutlined,DownOutlined } from '@ant-design/icons';
-import { ActionType, ModalForm, ProFormText, ProFormTextArea,ProForm } from '@ant-design/pro-components';
+import { PlusOutlined } from '@ant-design/icons';
+import { ActionType, ModalForm, ProFormText, ProFormTextArea, ProForm } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
-import { Button, message,Switch,Tree } from 'antd';
-import { FC,useState } from 'react';
+import { Button, message, Switch } from 'antd';
+import { FC, useState } from 'react';
 
 interface CreateFormProps {
   reload?: ActionType['reload'];
 }
 
+// CreateForm component for adding staff
 const CreateForm: FC<CreateFormProps> = (props) => {
   const { reload } = props;
   const [readonly, setReadonly] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
   const intl = useIntl();
 
-  const { run, loading } = useRequest(addStaff, {
+  // UseRequest hook for handling API requests
+  const { loading } = useRequest(addStaff, {
     manual: true,
-    onSuccess: (res) => {
+    onSuccess: () => {
       messageApi.success('Added successfully');
       reload?.();
     },
@@ -30,37 +28,10 @@ const CreateForm: FC<CreateFormProps> = (props) => {
     },
   });
 
-  const treeData: TreeDataNode[] = [
-    {
-      title: 'Manager',
-      key: 1,
-      children: [
-        {
-          title: 'Senior',
-          key: 2,
-          children: [
-            {
-              title: 'Junior',
-              key: 3,
-            }
-          ],
-        }
-      ],
-    },
-  ];
-  
-
-  const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info);
-  };
-
-  const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
-    console.log('onCheck', checkedKeys, info);
-  };
-
   return (
     <>
       {contextHolder}
+      {/* ModalForm for adding staff */}
       <ModalForm
         title={intl.formatMessage({
           id: 'add staff',
@@ -73,23 +44,24 @@ const CreateForm: FC<CreateFormProps> = (props) => {
         }
         width="400px"
         modalProps={{ okButtonProps: { loading } }}
+        // Function to handle form submission
         onFinish={async (value) => {
-          console.log(value,'add staff')
-          let formdata = {
+          console.log(value, 'add staff');
+          let formData = {
             ...value,
-            name:"",
-            status:value?.status ? 1 : 0,
-            password:"",
-            description:"",
-          }
-          let res = await addStaff({ ...formdata });
-          console.log('addNewRole',res)
-          if(res?.code === 200){
+            name: "",
+            status: value?.status ? 1 : 0,
+            password: "",
+            description: "",
+          };
+          let res = await addStaff({ ...formData });
+          console.log('addNewRole', res);
+          if (res?.code === 200) {
             messageApi.success('Added successfully');
-            setTimeout(() =>{
-              window.location.reload()
-            },2000)
-          } else if(res?.code === 209){
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } else if (res?.code === 209) {
             messageApi.error('staff already exists!');
           } else {
             messageApi.error('Adding failed, please try again!');
@@ -97,6 +69,7 @@ const CreateForm: FC<CreateFormProps> = (props) => {
           return true;
         }}
       >
+        {/* ProFormText for entering username */}
         <ProFormText
           rules={[
             {
@@ -116,7 +89,8 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             defaultMessage: 'Name',
           })}
         />
-         <ProFormText
+        {/* ProFormText for entering phone number */}
+        <ProFormText
           rules={[
             {
               required: true,
@@ -135,72 +109,41 @@ const CreateForm: FC<CreateFormProps> = (props) => {
             defaultMessage: 'Phone Number',
           })}
         />
-           <ProForm.Item 
-            
-            rules={[
-             {
-               required: false,
-               message: (
-                 <FormattedMessage
-                   id="status"
-                 />
-               ),
-             },
-           ]}
-           width="md"
-           name="status"
-           label={intl.formatMessage({
-             id: 'role status',
-             defaultMessage: 'Role Status',
-           })}>
-             
-             <Switch
-                style={{
-                  marginBlockEnd: 16,
-                }}
-                checked={readonly}
-                checkedChildren="on"
-                unCheckedChildren="off"
-                onChange={setReadonly}
-              />
-        
-           </ProForm.Item>
-
-           {/* <ProForm.Item 
-            rules={[
-             {
-               required: false,
-               message: (
-                 <FormattedMessage
-                   id="status"
-                 />
-               ),
-             },
-           ]}
-           width="md"
-           name="status"
-           label={intl.formatMessage({
-             id: 'role assign',
-             defaultMessage: 'role assign',
-           })}>
-           
-            <Tree
-              showLine
-              switcherIcon={<DownOutlined />}
-              defaultExpandedKeys={['0-0-0']}
-              onSelect={onSelect}
-              treeData={treeData}
-            />
-           </ProForm.Item> */}
-
-           <ProFormTextArea 
-              width="md" 
-              name="desc"
-              label={intl.formatMessage({
-                id: 'pages.newOrder.notes',
-                defaultMessage: 'notes',
-              })} />
-     
+        {/* ProForm item for role status */}
+        <ProForm.Item
+          rules={[
+            {
+              required: false,
+              message: <FormattedMessage id="status" />,
+            },
+          ]}
+          width="md"
+          name="status"
+          label={intl.formatMessage({
+            id: 'role status',
+            defaultMessage: 'Role Status',
+          })}
+        >
+          {/* Switch component for toggling readonly mode */}
+          <Switch
+            style={{
+              marginBlockEnd: 16,
+            }}
+            checked={readonly}
+            checkedChildren="on"
+            unCheckedChildren="off"
+            onChange={setReadonly}
+          />
+        </ProForm.Item>
+        {/* ProFormTextArea for entering notes */}
+        <ProFormTextArea
+          width="md"
+          name="desc"
+          label={intl.formatMessage({
+            id: 'pages.newOrder.notes',
+            defaultMessage: 'Notes',
+          })}
+        />
       </ModalForm>
     </>
   );

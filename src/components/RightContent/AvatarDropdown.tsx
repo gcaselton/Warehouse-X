@@ -13,6 +13,7 @@ export type GlobalHeaderRightProps = {
   children?: React.ReactNode;
 };
 
+// Component to display the current user's name as an icon
 export const AvatarName = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -37,17 +38,14 @@ const useStyles = createStyles(({ token }) => {
   };
 });
 
+// AvatarDropdown component for user avatar dropdown menu
 export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, children }) => {
-  /**
-   * 退出登录，并且将当前的 url 保存
-   */
+  // Function to handle logout functionality
   const loginOut = async () => {
     await outLogin();
     const { search, pathname } = window.location;
     const urlParams = new URL(window.location.href).searchParams;
-    /** 此方法会跳转到 redirect 参数所在的位置 */
     const redirect = urlParams.get('redirect');
-    // Note: There may be security issues, please note
     if (window.location.pathname !== '/user/login' && !redirect) {
       history.replace({
         pathname: '/user/login',
@@ -57,6 +55,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
       });
     }
   };
+
   const { styles } = useStyles();
 
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -98,18 +97,19 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
     return loading;
   }
 
+  // Define menu items for the dropdown menu
   const menuItems = [
     ...(menu
       ? [
           {
             key: 'center',
             icon: <UserOutlined />,
-            label: '个人中心',
+            label: 'Profile',
           },
           {
             key: 'settings',
             icon: <SettingOutlined />,
-            label: '个人设置',
+            label: 'Settings',
           },
           {
             type: 'divider' as const,
@@ -119,11 +119,12 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: 'logout',
+      label: 'Logout',
     },
   ];
 
   return (
+    // Render HeaderDropdown component with its menu items
     <HeaderDropdown
       menu={{
         selectedKeys: [],

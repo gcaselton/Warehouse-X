@@ -1,54 +1,35 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { removeRule, rule,getInStorageList,deleteOrerById,getRoleById } from '@/services/ant-design-pro/api';
+/**
+ * This is the main inventory page where users can see a list of all created returns and perform numerous actions.
+ */
+import { removeRule, getInStorageList, deleteOrerById, getRoleById } from '@/services/ant-design-pro/api';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
   PageContainer,
   ProDescriptions,
-  ProTable,
-  ModalForm,
-  ProForm,
-  ProFormDateRangePicker,
-  ProFormSelect,
-  ProFormText,
+  ProTable
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
-import { 
-  Button, 
-  Drawer, 
-  Input, 
+import {
+  Button,
+  Drawer,
+  Input,
   message,
-  Modal,
-  Avatar,
-  Badge,
-  Form,
-  Card,
-  Col,
-  Dropdown,
-  List,
-  Progress,
-  Radio,
-  Row,
- } from 'antd';
+  Modal
+} from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
-import DistributeForm from '../components/DistributeForm'
-import { history, useModel } from '@umijs/max';
+import DistributeForm from '../components/DistributeForm';
+import { useModel } from '@umijs/max';
 
+// Define component
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
-
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
   const intl = useIntl();
-
   const [messageApi, contextHolder] = message.useMessage();
 
   const { run: delRun, loading } = useRequest(removeRule, {
@@ -56,18 +37,19 @@ const TableList: React.FC = () => {
     onSuccess: () => {
       setSelectedRows([]);
       actionRef.current?.reloadAndRest?.();
-
       messageApi.success('Deleted successfully and will refresh soon');
     },
     onError: () => {
       messageApi.error('Delete failed, please try again');
     },
   });
-  const [form] = Form.useForm<{ name: string; company: string }>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [currentUserRoleId, setCurrentUserRoleId] = useState<number>(0);
+
+  // Define columns for the table
   const columns: ProColumns<API.RuleListItem>[] = [
+    // Column for product name
     {
       title: (
         <FormattedMessage
@@ -77,25 +59,18 @@ const TableList: React.FC = () => {
       ),
       dataIndex: 'name',
       render: (dom, entity) => {
-        // debugger
-        // 
         return (
           <a 
             onClick={() => {
               setCurrentRow(entity);
               setShowDetail(true);
             }}>
-          {/* <Avatar size="large" shape="square" style={{marginRight:10}} src={entity.sliderUrls} /> */}
-          {dom}
-        </a>
+            {dom}
+          </a>
         );
       },
     },
-    // {
-    //   title: <FormattedMessage id="pages.searchTable.orderId" defaultMessage="Description" />,
-    //   dataIndex: 'orderId',
-    //   valueType: 'textarea',
-    // },
+    // Column for serial ID
     {
       title: (
         <FormattedMessage
@@ -104,20 +79,8 @@ const TableList: React.FC = () => {
         />
       ),
       dataIndex: 'serialId',
-      sorter: true,
-      // hideInForm: true,
-      // renderText: (val: string) =>
-      //   `${val}${intl.formatMessage({
-      //     id: 'pages.searchTable.tenThousand',
-      //     defaultMessage: ' 万 ',
-      //   })}`,
-      // hideInForm: false,
-      // renderText: (val: string) =>
-      //   `${val}${intl.formatMessage({
-      //     id: 'pages.searchTable.tenThousand',
-      //     defaultMessage: ' 万 ',
-      //   })}`,
     },
+    // Column for return type
     {
       title: <FormattedMessage id="returnType" defaultMessage="Return Type" />,
       dataIndex: 'categoryId',
@@ -145,63 +108,37 @@ const TableList: React.FC = () => {
           status: 'recycle',
         }
       },
-  },
-    // {
-    //     title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="auditStatus" />,
-    //     dataIndex: 'status',
-    //     hideInForm: true,
-    //     valueEnum: {
-    //       0: {
-    //         text: (
-    //           <FormattedMessage
-    //             id="pages.searchTable.auditStatus.default"
-    //             defaultMessage="Shut down"
-    //           />
-    //         ),
-    //         status: 'Default',
-    //       },
-    //       1: {
-    //         text: (
-    //           <FormattedMessage id="pages.searchTable.auditStatus.success" defaultMessage="success" />
-    //         ),
-    //         status: 'inStorage',
-    //       },
-    //       2: {
-    //         text: (
-    //           <FormattedMessage id="pages.searchTable.auditStatus.refuse" defaultMessage="refuse" />
-    //         ),
-    //         status: 'outStorage',
-    //       }
-    //     },
-    //   },
+    },
+    // Column for audit status
     {
-        title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="Audit Status" />,
-        dataIndex: 'status',
-        hideInForm: true,
-        valueEnum: {
-          0: {
-            text: (
-              <FormattedMessage
-                id="pages.searchTable.auditStatus.default"
-                defaultMessage="In Process"
-              />
-            ),
-            status: 'In Process',
-          },
-          1: {
-            text: (
-              <FormattedMessage id="pages.searchTable.auditStatus.success" defaultMessage="Authorised" />
-            ),
-            status: 'Authorised',
-          },
-          2: {
-            text: (
-              <FormattedMessage id="pages.searchTable.auditStatus.refuse" defaultMessage="Denied" />
-            ),
-            status: 'Denied',
-          }
+      title: <FormattedMessage id="pages.searchTable.auditStatus" defaultMessage="Audit Status" />,
+      dataIndex: 'status',
+      hideInForm: true,
+      valueEnum: {
+        0: {
+          text: (
+            <FormattedMessage
+              id="pages.searchTable.auditStatus.default"
+              defaultMessage="In Process"
+            />
+          ),
+          status: 'In Process',
         },
+        1: {
+          text: (
+            <FormattedMessage id="pages.searchTable.auditStatus.success" defaultMessage="Authorised" />
+          ),
+          status: 'Authorised',
+        },
+        2: {
+          text: (
+            <FormattedMessage id="pages.searchTable.auditStatus.refuse" defaultMessage="Denied" />
+          ),
+          status: 'Denied',
+        }
       },
+    },
+    // Column for create time
     {
       title: (
         <FormattedMessage
@@ -209,7 +146,6 @@ const TableList: React.FC = () => {
           defaultMessage="Date and Time"
         />
       ),
-      sorter: true,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
@@ -231,20 +167,18 @@ const TableList: React.FC = () => {
         return defaultRender(item);
       },
     },
+    // Column for options
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Options" />,
       dataIndex: 'option',
       valueType: 'option',
-      display:"none",
-      render: (_, record) => [
-        // <a style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}>{{--}}</a>
-       
+      display: "none",
+      render: (record) => [
         <a 
-        style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}
-         >
+          style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}
+        >
           --
         </a>,
-        // update
         <UpdateForm
           trigger={
             <a>
@@ -258,9 +192,8 @@ const TableList: React.FC = () => {
             currentUserRoleId:currentUserRoleId
           }}
         />,
-        // delete
         <a key="subscribeAlert"  
-        style={{display: currentUserRoleId === 1 ? 'inline' : 'none'}}
+          style={{display: currentUserRoleId === 1 ? 'inline' : 'none'}}
           onClick={() => {
             console.log(record,"record---------")
             Modal.confirm({
@@ -270,14 +203,12 @@ const TableList: React.FC = () => {
               cancelText: 'Cancel',
               onOk: () => deleteItem(record.id),
             });
-        }}>
+          }}>
           <FormattedMessage
             id="delete"
             defaultMessage="Delete"
           />
         </a>,
-
-        // distribute
         <DistributeForm 
           trigger={
             <a>
@@ -296,15 +227,13 @@ const TableList: React.FC = () => {
   ];
 
   const deleteItem = async (id: string) => {
-    
+    // Delete item function
     let res = await deleteOrerById(id)
     if(res.code === 200){
       messageApi.success('Deleted successfully and will refresh soon');
       setTimeout(() =>{
         window.location.reload()
       },2000)
-      
-      // getInStorageList({pageSize: 20,current: 1})
     } else {
       messageApi.error('Delete failed, please try again');
     }
@@ -313,18 +242,15 @@ const TableList: React.FC = () => {
 
   /**
    *  Delete node
-   * @zh-CN 删除节点
-   *
    * @param selectedRows
    */
   const handleRemove = useCallback(
     async (selectedRows: API.RuleListItem[]) => {
+      // Handle remove function
       if (!selectedRows?.length) {
-        messageApi.warning('请选择删除项');
-
+        messageApi.warning('Delete node');
         return;
       }
-
       await delRun({
         data: {
           key: selectedRows.map((row) => row.key),
@@ -334,6 +260,7 @@ const TableList: React.FC = () => {
     [delRun],
   );
 
+  // rendering
   return (
     <PageContainer>
       {contextHolder}
@@ -354,8 +281,6 @@ const TableList: React.FC = () => {
             pageSize: number;
             current: number;
           },
-          sort,
-          filter,
         ) => {
           console.log('params-------------',params)
           let res1 = await getRoleById(currentUser?.id)
@@ -424,6 +349,7 @@ const TableList: React.FC = () => {
         }}
         closable={false}
       >
+        {/* Render ProDescriptions component */}
         {currentRow?.name && (
           <ProDescriptions<API.RuleListItem>
             column={2}

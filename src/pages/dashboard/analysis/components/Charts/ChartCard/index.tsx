@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// Chart component for the statistics page
 import { Card } from 'antd';
 import type { CardProps } from 'antd/es/card';
 import classNames from 'classnames';
@@ -81,13 +81,6 @@ const ChartCard: React.FC<ChartCardProps> = (props) => {
 
   const {
     loading = false,
-    contentHeight,
-    title,
-    avatar,
-    action,
-    total,
-    footer,
-    children,
     ...rest
   } = props;
   return (

@@ -1,12 +1,12 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Area, Column } from '@ant-design/plots';
-import { Col, Progress, Row, Tooltip } from 'antd';
+import { Col, Row, Tooltip } from 'antd';
 import numeral from 'numeral';
 import type { DataItem } from '../data.d';
 import useStyles from '../style.style';
-import Yuan from '../utils/Yuan';
-import { ChartCard, Field } from './Charts';
+import { ChartCard } from './Charts';
 import Trend from './Trend';
+
 const topColResponsiveProps = {
   xs: 24,
   sm: 12,
@@ -17,10 +17,17 @@ const topColResponsiveProps = {
     marginBottom: 24,
   },
 };
+
+/**
+ * IntroduceRow component displays multiple ChartCard components in a Row layout.
+ * Each ChartCard represents different statistics with tooltips for additional information.
+ */
 const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: DataItem[] }) => {
   const { styles } = useStyles();
+
   return (
     <Row gutter={24}>
+      {/* Total Returns ChartCard */}
       <Col {...topColResponsiveProps}>
         <ChartCard
           bordered={false}
@@ -31,11 +38,10 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
             </Tooltip>
           }
           loading={loading}
-          // total={() => <Yuan>126560</Yuan>}
           total={() => 25637}
-          footer={<Field label="daily sales" value={`$${numeral(12423).format('0,0')}`} />}
           contentHeight={46}
         >
+          {/* Trend components within ChartCard */}
           <Trend
             flag="up"
             style={{
@@ -52,6 +58,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
         </ChartCard>
       </Col>
 
+      {/* Refund ChartCard */}
       <Col {...topColResponsiveProps}>
         <ChartCard
           bordered={false}
@@ -63,9 +70,9 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
             </Tooltip>
           }
           total={numeral(8846).format('0,0')}
-          footer={<Field label="" value={`$${numeral(12423).format('0,0')}`}/>}
           contentHeight={46}
         >
+          {/* Area chart within ChartCard */}
           <Area
             xField="x"
             yField="y"
@@ -82,6 +89,8 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
           />
         </ChartCard>
       </Col>
+
+      {/* Repair ChartCard */}
       <Col {...topColResponsiveProps}>
         <ChartCard
           bordered={false}
@@ -93,9 +102,9 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
             </Tooltip>
           }
           total={numeral(6560).format('0,0')}
-          footer={<Field label="" value={`$${numeral(1234).format('0,0')}`} />}
           contentHeight={46}
         >
+          {/* Column chart within ChartCard */}
           <Column
             xField="x"
             yField="y"
@@ -107,6 +116,8 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
           />
         </ChartCard>
       </Col>
+
+      {/* Recycle ChartCard */}
       <Col {...topColResponsiveProps}>
         <ChartCard
           loading={loading}
@@ -118,34 +129,26 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
             </Tooltip>
           }
           total="10231"
-          footer={
-            <div
-              style={{
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-              }}
-            >
-              <Trend
-                flag="up"
-                style={{
-                  marginRight: 16,
-                }}
-              >
-                week
-                <span className={styles.trendText}>12%</span>
-              </Trend>
-              <Trend flag="down">
-                day
-                <span className={styles.trendText}>11%</span>
-              </Trend>
-            </div>
-          }
           contentHeight={46}
         >
-          <Progress percent={39} strokeColor={{ from: '#108ee9', to: '#87d068' }} status="active" />
+          {/* Trend components within ChartCard */}
+          <Trend
+            flag="up"
+            style={{
+              marginRight: 16,
+            }}
+          >
+            week
+            <span className={styles.trendText}>12%</span>
+          </Trend>
+          <Trend flag="down">
+            day
+            <span className={styles.trendText}>11%</span>
+          </Trend>
         </ChartCard>
       </Col>
     </Row>
   );
 };
+
 export default IntroduceRow;

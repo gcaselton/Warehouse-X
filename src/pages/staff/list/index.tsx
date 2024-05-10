@@ -1,4 +1,12 @@
-import { removeRule, rule,getStaffLit,deleteUserByID,getRoleById } from '@/services/ant-design-pro/api';
+/**
+ * This page lists all current staff members and allows users to perform multiple actions on said users.
+ */
+import {
+  removeRule,
+  getStaffLit,
+  deleteUserByID,
+  getRoleById,
+} from '@/services/ant-design-pro/api';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -7,33 +15,28 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, useRequest } from '@umijs/max';
-import { Button, Drawer, Input, message,Modal } from 'antd';
+import { Button, Drawer, message, Modal } from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
-import AssignForm  from '../components/AssignForm';
-import { history, useModel } from '@umijs/max';
+import AssignForm from '../components/AssignForm';
+import { useModel } from '@umijs/max';
 
 const TableList: React.FC = () => {
+  // Initialize hooks and state
   const { initialState } = useModel('@@initialState');
-const { currentUser } = initialState || {};
-
-console.log(currentUser,"currentUser--------")
+  const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [currentUserRoleId, setCurrentUserRoleId] = useState<number>(0);
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
-
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
   const intl = useIntl();
 
+  // Initialize message API for notifications
   const [messageApi, contextHolder] = message.useMessage();
 
+  // Define request and response logic for deleting a rule
   const { run: delRun, loading } = useRequest(removeRule, {
     manual: true,
     onSuccess: () => {
@@ -47,7 +50,9 @@ console.log(currentUser,"currentUser--------")
     },
   });
 
+  // Define columns for ProTable
   const columns: ProColumns<API.RuleListItem>[] = [
+    // Column for displaying user name
     {
       title: (
         <FormattedMessage
@@ -69,12 +74,14 @@ console.log(currentUser,"currentUser--------")
         );
       },
     },
+    // Column for displaying phone number
     {
       title: <FormattedMessage id="phone" defaultMessage="Phone Number" />,
       dataIndex: 'phone',
       valueType: 'textarea',
       hideInForm: true,
     },
+    // Column for displaying status
     {
       title: <FormattedMessage id="status" defaultMessage="Status" />,
       dataIndex: 'status',
@@ -97,21 +104,25 @@ console.log(currentUser,"currentUser--------")
         }
       },
     },
+    // Column for displaying role
     {
       title: <FormattedMessage id="role" defaultMessage="Role" />,
       dataIndex: 'role',
       valueType: 'textarea',
     },
+    // Column for operating actions
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
+        // Placeholder action for certain user roles
         <a 
         style={{display: currentUserRoleId === 3 ? 'inline' : 'none'}}
          >
           --
         </a>,
+        // UpdateForm component for updating user information
         <UpdateForm
           trigger={
             <a
@@ -126,6 +137,7 @@ console.log(currentUser,"currentUser--------")
             currentUserRoleId:currentUserRoleId
           }}
         />,
+        // AssignForm component for assigning roles to users
         <AssignForm
           trigger={
             <a >
@@ -139,11 +151,11 @@ console.log(currentUser,"currentUser--------")
             currentUserRoleId:currentUserRoleId
           }}
         />,
+        // Delete action for deleting a user
         <a 
           key="subscribeAlert"
           style={{display: currentUserRoleId === 1 ? 'inline' : 'none'}}
           onClick={() => {
-            console.log(record,"record---------")
             Modal.confirm({
               title: 'delete staff',
               content: 'Are you sure you want to delete this staff?',
@@ -161,41 +173,27 @@ console.log(currentUser,"currentUser--------")
     },
   ];
 
-  const getRoldId = async(id:number) => {
-    let res = await getRoleById(currentUser?.id)
-    console.log(res,"res----getRoldId")
-  }
-
-
+  // Function to delete a user item
   const deleteItem = async (id: number) => {
-    
     let res = await deleteUserByID(id)
     if(res.code === 200){
       messageApi.success('Deleted successfully and will refresh soon');
       setTimeout(() =>{
         window.location.reload()
       },2000)
-      
     } else {
       messageApi.error('Delete failed, please try again');
     }
     console.log(res,"delete res")
   }; 
 
-  /**
-   *  Delete node
-   * @zh-CN 删除节点
-   *
-   * @param selectedRows
-   */
+  // Function to handle batch removal of selected rows
   const handleRemove = useCallback(
     async (selectedRows: API.RuleListItem[]) => {
       if (!selectedRows?.length) {
-        messageApi.warning('请选择删除项');
-
+        messageApi.warning('Delete node');
         return;
       }
-
       await delRun({
         data: {
           key: selectedRows.map((row) => row.key),
@@ -208,6 +206,7 @@ console.log(currentUser,"currentUser--------")
   return (
     <PageContainer>
       {contextHolder}
+      {/* ProTable component to display user data */}
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'Staff',
@@ -219,21 +218,15 @@ console.log(currentUser,"currentUser--------")
           labelWidth: 120,
         }}
         toolBarRender={() => [<CreateForm key="create" reload={actionRef.current?.reload} />]}
-        // request={getStaffLit}
-        request = {async (
+        request={async (
           params: T & {
             pageSize: number;
             current: number;
           },
-          sort,
-          filter,
         ) => {
-          console.log('params-------------',params)
           let res1 = await getRoleById(currentUser?.id)
-          console.log(res1,"res----getRoldId")
           setCurrentUserRoleId(res1?.data)
           const msg = await getStaffLit(params);
-          console.log('getStaffLit',msg);
           return {
             data: msg?.data?.list,
             success: msg?.code === 200,
@@ -247,6 +240,7 @@ console.log(currentUser,"currentUser--------")
           },
         }}
       />
+      {/* Footer toolbar for batch deletion */}
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
           extra={
@@ -277,15 +271,10 @@ console.log(currentUser,"currentUser--------")
               defaultMessage="Batch deletion"
             />
           </Button>
-          {/* <Button type="primary">
-            <FormattedMessage
-              id="pages.searchTable.batchApproval"
-              defaultMessage="Batch approval"
-            />
-          </Button> */}
         </FooterToolbar>
       )}
 
+      {/* Drawer component for displaying detailed information */}
       <Drawer
         width={600}
         open={showDetail}

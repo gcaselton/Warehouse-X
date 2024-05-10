@@ -1,6 +1,8 @@
-# Ant Design Pro
+# Warehouse X
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+Warehouse X is a web-based returns management solution designed on behalf of Dyson.
+
+In order to run the website locally, you'll first need node.js installed, then you can run any of the commands below.
 
 ## Environment Prepare
 
@@ -15,12 +17,6 @@ or
 ```bash
 yarn
 ```
-
-## Provided Scripts
-
-Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
-
-Scripts provided in `package.json`. It's safe to modify or add additional script:
 
 ### Start project
 
@@ -40,7 +36,7 @@ npm run build
 npm run lint
 ```
 
-You can also use script to auto fix some lint error:
+You can also use script to auto fix some lint errors:
 
 ```bash
 npm run lint:fix
@@ -54,5 +50,6 @@ npm test
 
 ## More
 
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).
+For more information or help using Warehouse X, please contact c3062942@newcastle.ac.uk
+
 # WarehouseX-web
